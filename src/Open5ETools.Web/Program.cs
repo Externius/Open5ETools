@@ -34,8 +34,8 @@ using (var scope = app.Services.CreateScope())
             .GetRequiredService<AppDbContextInitializer>();
         using var source = new CancellationTokenSource();
         var token = source.Token;
-        initializer.UpdateAsync(token).Wait();
-        initializer.SeedDataAsync(token).Wait();
+        await initializer.UpdateAsync(token);
+        await initializer.SeedDataAsync(token);
     }
     catch (Exception ex)
     {

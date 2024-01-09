@@ -23,7 +23,7 @@ public class AppDbContextInitializer(IAppDbContext context, IDungeonService dung
     {
         if (_context.Database.IsSqlServer() || _context.Database.IsSqlite())
         {
-            await _context.Database.MigrateAsync(cancellationToken: cancellationToken);
+            await _context.Database.MigrateAsync(cancellationToken);
         }
         else
         {
