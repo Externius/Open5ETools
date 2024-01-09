@@ -1,0 +1,90 @@
+@model Open5ETools.Web.Models.Encounter.EncounterOptionViewModel
+
+@{
+    ViewData["Title"] = Resources.Encounter.Title;
+}
+
+<form id="generateForm" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Timestamp" type="hidden" />
+    <div class="col-md-3">
+        <label asp-for="PartyLevel" class="form-label">@Resources.Common.PartyLevel</label>
+        @* <input asp-for="PartyLevel" type="number" max="20" class="form-control" id="partyLevel"> *@
+        <select asp-for="PartyLevel" asp-items="@Model.PartyLevels" class="form-select">
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="PartySize" class="form-label">@Resources.Common.PartySize</label>
+        @* <input asp-for="PartySize" type="number" min="1" max="20" class="form-control" id="partySize"> *@
+        <select asp-for="PartySize" asp-items="@Model.PartySizes" class="form-select">
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Difficulty" class="form-label">@Resources.Common.Difficulty</label>
+        <select asp-for="Difficulty" asp-items="@Model.Difficulties" class="form-select"></select>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Count" class="form-label">@Resources.Common.Count</label>
+        <input asp-for="Count" type="number" class="form-control" id="count">
+    </div>
+    <div class="col-md-6">
+        <label asp-for="SelectedSizes" class="form-label">@Resources.Common.Size</label>
+        <select asp-for="SelectedSizes" asp-items="@Model.Sizes" class="form-select"></select>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="SelectedMonsterTypes" class="form-label">@Resources.Encounter.MonsterType</label>
+        <select asp-for="SelectedMonsterTypes" asp-items="@Model.MonsterTypes" class="form-select">
+        </select>
+    </div>
+    <div class="col-12">
+        <button type="button" id="generateBtn" class="btn btn-primary">@Resources.Common.Generate</button>
+    </div>
+</form>
+<div id="exceptions"></div>
+<div class="col-md-12" id="details">
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_AjaxScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#generateBtn', function (e) {
+                e.preventDefault();
+                $('#exceptions').removeClass("alert alert-danger");
+                $('#exceptions').empty();
+                var data = $("#generateForm").serialize();
+                $.ajax({
+                    url: '@Url.Action("Generate", "Encounter")',
+                    method: "POST",
+                    data: data,
+                    success: function (result) {
+                        $('#details').html(result);
+                        return $('#details');
+                    },
+                    error: function (result) {
+                        $('#exceptions').addClass("alert alert-danger");
+                        $('#exceptions').text(result.responseJSON.detail);
+                        $('#details').empty();
+                    }
+                });
+            });
+
+            $(document).on('click', '#monsterDetail', function (e) {
+                e.preventDefault();
+                var id = $(this).data('monster-id');
+                $.ajax({
+                    url: '@Url.Action("MonsterDetail", "Encounter")',
+                    method: "GET",
+                    data: { id: id },
+                    success: function (result) {
+                        $('#modal').html(result);
+                        $('#modal').modal('toggle');
+                    }
+                });
+            });
+        });
+    </script>
+}

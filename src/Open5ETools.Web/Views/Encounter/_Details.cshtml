@@ -1,0 +1,32 @@
+@model Open5ETools.Web.Models.Encounter.EncounterViewModel
+
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-2">
+    @foreach (var monster in Model.Details)
+    {
+        <div class="card text-bg-light mx-5 my-1">
+            <div class="row g-0">
+                <div class="col-md-2 align-self-center mt-2">
+                    <button type="button" class="btn btn-link btn-lg" id="monsterDetail" data-monster-id="@monster.Id"
+                        title="Monster details">
+                        <i class="fa-solid fa-dice-d20 fa-2xl"></i>
+                    </button>
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            @monster.JsonMonsterModel.Count x @monster.JsonMonsterModel.Name
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted"> @monster.JsonMonsterModel.Type
+                            (@monster.JsonMonsterModel.Size)</h6>
+                        <p class="card-text">
+                            @Resources.Common.Difficulty: @monster.JsonMonsterModel.Difficulty
+                        </p>
+                        <p class="card-text">
+                            (@monster.JsonMonsterModel.Xp @Resources.Encounter.Xp)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

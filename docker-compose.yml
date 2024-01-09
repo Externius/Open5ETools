@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+    web:
+        build:
+            context: .
+            dockerfile: ./src/Open5ETools.Web/Dockerfile
+        ports:
+            - 5254:80
+            - 7150:443
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
+            ASPNETCORE_URLS: https://+:443;http://+:80
+            ASPNETCORE_Kestrel__Certificates__Default__Password: ${CERTPASSWORD}
+            ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+            ConnectionStrings__DbProvider: sqlserver
+            ConnectionStrings__Open5ETools: Server=db,1432;Database=${OPEN5ETOOLSDB};User=${OPEN5ETOOLSDBUSER};Password=${OPEN5ETOOLSDBPASSWORD};TrustServerCertificate=true;Integrated Security=false;
+            Serilog__WriteTo__0__Args__connectionString: Server=db,1432;Database=${OPEN5ETOOLSDB};User=${OPEN5ETOOLSDBUSER};Password=${OPEN5ETOOLSDBPASSWORD};TrustServerCertificate=true;Integrated Security=false;
+        networks:
+            - open5etools-network
+        volumes:
+            - ${CERTPATH}:/https:ro
+        depends_on:
+            - db
+        container_name: open5etools-web
+    db:
+        build:
+            context: .
+            dockerfile: ./Docker/Dockerfile
+        ports:
+            - 1432:1432
+        environment:
+            MSSQL_SA_PASSWORD: ${SAPASSWORD}
+            MSSQL_PID: Express
+            MSSQL_TCP_PORT: 1432
+            ACCEPT_EULA: "Y"
+            OPEN5ETOOLS_DB: ${OPEN5ETOOLSDB}
+            OPEN5ETOOLS_USER: ${OPEN5ETOOLSDBUSER}
+            OPEN5ETOOLS_PASSWORD: ${OPEN5ETOOLSDBPASSWORD}
+        networks:
+            - open5etools-network
+        volumes:
+            - sqlvolume:/var/opt/mssql
+        container_name: open5etools-db
+volumes:
+    sqlvolume:
+        driver: local
+networks:
+    open5etools-network:
+        driver: bridge
