@@ -10,13 +10,11 @@
     <input asp-for="Timestamp" type="hidden" />
     <div class="col-md-3">
         <label asp-for="PartyLevel" class="form-label">@Resources.Common.PartyLevel</label>
-        @* <input asp-for="PartyLevel" type="number" max="20" class="form-control" id="partyLevel"> *@
         <select asp-for="PartyLevel" asp-items="@Model.PartyLevels" class="form-select">
         </select>
     </div>
     <div class="col-md-3">
         <label asp-for="PartySize" class="form-label">@Resources.Common.PartySize</label>
-        @* <input asp-for="PartySize" type="number" min="1" max="20" class="form-control" id="partySize"> *@
         <select asp-for="PartySize" asp-items="@Model.PartySizes" class="form-select">
         </select>
     </div>

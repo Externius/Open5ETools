@@ -114,10 +114,9 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
             if (deleted.HasValue)
                 query = query.Where(x => x.IsDeleted == deleted.Value);
 
-            return (await query.ToListAsync(cancellationToken))
+            return [.. (await query.ToListAsync(cancellationToken))
                                 .Select(_mapper.Map<UserModel>)
-                                .OrderBy(um => um.Username)
-                                .ToList();
+                                .OrderBy(um => um.Username)];
         }
         catch (Exception ex)
         {

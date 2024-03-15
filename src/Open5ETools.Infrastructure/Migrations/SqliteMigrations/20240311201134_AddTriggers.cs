@@ -10,7 +10,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var tables = new[] { "Users", "Dungeons", "DungeonOptions", "Options", "Monsters", "Treasures" };
+            var tables = new[] { "Users", "Dungeons", "DungeonOptions", "Options", "Monsters", "Treasures", "Spells" };
             foreach (var table in tables)
             {
                 migrationBuilder.Sql(
@@ -34,6 +34,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                     END
                     ");
             }
+
         }
 
         /// <inheritdoc />

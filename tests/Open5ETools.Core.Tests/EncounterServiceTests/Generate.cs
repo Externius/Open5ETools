@@ -1,7 +1,7 @@
 ﻿using Open5ETools.Core.Common.Enums.EG;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Extensions;
-using Open5ETools.Core.Common.Interfaces.EG;
+using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Models.EG;
 using Shouldly;
 
@@ -42,7 +42,7 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
         var option = new EncounterOption
         {
             PartyLevel = partyLevel,
-            MonsterTypes = new List<MonsterType> { MonsterType.Beast, MonsterType.Humanoid, MonsterType.SwarmOfTinyBeasts },
+            MonsterTypes = [MonsterType.Beast, MonsterType.Humanoid, MonsterType.SwarmOfTinyBeasts],
             PartySize = partySize,
             Difficulty = difficulty
         };
@@ -59,7 +59,7 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
         {
             PartyLevel = 1,
             PartySize = 1,
-            MonsterTypes = new List<MonsterType> { MonsterType.Dragon },
+            MonsterTypes = [MonsterType.Dragon],
             Difficulty = Difficulty.Easy
         };
         await Should.ThrowAsync<ServiceException>(async () =>

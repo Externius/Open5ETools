@@ -1,7 +1,7 @@
 ﻿using Open5ETools.Core.Common.Models.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Services;
 
-namespace Open5ETools.Core.Common.Interfaces.DM.Generator;
+namespace Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 
 public interface IDungeonHelper
 {

@@ -18,7 +18,7 @@
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex ">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity!.IsAuthenticated)
                         {
@@ -28,19 +28,24 @@
                                     Tools
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-area=""
+                                    <li class="dropdown-item"><a class="nav-link text-dark" asp-area=""
                                             asp-controller="Encounter" asp-action="Index">@Resources.Common.NavEncounter</a>
                                     </li>
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="Dungeon"
-                                            asp-action="Index">@Resources.Common.NavDungeons</a>
+                                    <li class="dropdown-item"><a class="nav-link text-dark" asp-area=""
+                                            asp-controller="Dungeon" asp-action="Index">@Resources.Common.NavDungeons</a>
+                                    </li>
+                                    <li class="dropdown-item"><a class="nav-link text-dark" asp-area=""
+                                            asp-controller="Spell" asp-action="Index">@Resources.Common.NavSpells</a>
                                     </li>
                                     @if (User.Claims.Any(c => c.Value == Open5ETools.Core.Domain.Roles.Admin))
                                     {
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="User"
-                                                asp-action="Index">@Resources.Common.NavUserManagement </a></li>
+                                        <li class="dropdown-item"><a class="nav-link text-dark" asp-area=""
+                                                asp-controller="User" asp-action="Index">@Resources.Common.NavUserManagement
+                                            </a>
+                                        </li>
                                     }
                                 </ul>
                             </li>
@@ -70,7 +75,8 @@
 
     <em class="far fa-arrow-alt-circle-up toparrow" onclick="topFunction()" style="display:none"></em>
 
-    <div class="modal fade" id="modal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal fade" id="modal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="modalTitle" aria-hidden="true">
     </div>
 
     <partial name="_ScriptsPartial" />

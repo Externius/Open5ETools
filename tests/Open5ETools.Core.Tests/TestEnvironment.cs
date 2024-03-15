@@ -1,8 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Open5ETools.Core.Common.Interfaces.DM.Generator;
 using Open5ETools.Core.Common.Interfaces.Services;
+using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Services;
 using Open5ETools.Infrastructure;
 using Open5ETools.Infrastructure.Data;

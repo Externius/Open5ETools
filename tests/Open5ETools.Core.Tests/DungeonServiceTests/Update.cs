@@ -1,5 +1,5 @@
 ﻿using Open5ETools.Core.Common;
-using Open5ETools.Core.Common.Interfaces.DM.Services;
+using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Shouldly;
 
 namespace Open5ETools.Core.Tests.DungeonServiceTests;

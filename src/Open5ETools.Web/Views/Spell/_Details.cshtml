@@ -1,0 +1,71 @@
+@model Open5ETools.Web.Models.Spell.SpellViewModel
+
+
+@{
+    Layout = "_ModalLayout";
+    ViewData["Title"] = @Resources.Spell.DetailTitle;
+    ViewData["ModalSize"] = "modal-xl";
+}
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Name</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.Name">
+    </div>
+    <label class="col-sm-2 col-form-label">@Resources.Spell.CastingTime</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.CastingTime">
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Range</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.Range">
+    </div>
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Ritual</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly
+            value="@(Model.Ritual ? Resources.Common.Yes : Resources.Common.No)">
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Level</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.Level">
+    </div>
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Components</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.Components">
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Class</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.Class">
+    </div>
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Concentration</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly
+            value="@(Model.Concentration ? Resources.Common.Yes : Resources.Common.No)">
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">@Resources.Spell.Duration</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.Duration">
+    </div>
+    <label class="col-sm-2 col-form-label">@Resources.Spell.School</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="text" readonly value="@Model.School">
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">@Resources.Common.Description</label>
+    <div class="col-sm-10">
+        @Html.Raw(@Model.Desc)
+    </div>
+</div>
+
+@section ModalFooter {
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Resources.Common.Close</button>
+}

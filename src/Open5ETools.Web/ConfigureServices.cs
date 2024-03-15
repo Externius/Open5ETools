@@ -27,11 +27,11 @@ public static class ConfigureServices
                 opts.DefaultRequestCulture = new RequestCulture("en");
                 opts.SupportedCultures = supportedCultures;
                 opts.SupportedUICultures = supportedCultures;
-                opts.RequestCultureProviders = new List<IRequestCultureProvider>
-                {
+                opts.RequestCultureProviders =
+                [
                     new QueryStringRequestCultureProvider(),
                     new CookieRequestCultureProvider()
-                };
+                ];
             });
 
         services.Configure<CookiePolicyOptions>(options =>

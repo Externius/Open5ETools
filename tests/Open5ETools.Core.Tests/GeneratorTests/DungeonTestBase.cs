@@ -1,5 +1,5 @@
 using Open5ETools.Core.Common.Enums.DM;
-using Open5ETools.Core.Common.Interfaces.DM.Generator;
+using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Generator;
 using System.Text;
 using Xunit.Abstractions;

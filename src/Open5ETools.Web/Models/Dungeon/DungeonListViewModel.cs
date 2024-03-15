@@ -2,5 +2,5 @@
 
 public class DungeonListViewModel
 {
-    public IEnumerable<DungeonOptionViewModel> List { get; set; } = new List<DungeonOptionViewModel>();
+    public IEnumerable<DungeonOptionViewModel> List { get; set; } = [];
 }

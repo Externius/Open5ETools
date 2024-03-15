@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Interfaces.Data;
-using Open5ETools.Core.Common.Interfaces.DM.Services;
+using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Shouldly;
 
 namespace Open5ETools.Core.Tests.OptionServiceTests;
