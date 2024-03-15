@@ -1,7 +1,8 @@
 ﻿using Open5ETools.Core.Common.Interfaces.Data;
-using Open5ETools.Core.Common.Interfaces.DM.Generator;
-using Open5ETools.Core.Common.Interfaces.DM.Services;
-using Open5ETools.Core.Common.Interfaces.EG;
+using Open5ETools.Core.Common.Interfaces.Services.DM;
+using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
+using Open5ETools.Core.Common.Interfaces.Services.EG;
+using Open5ETools.Core.Common.Interfaces.Services.SM;
 
 namespace Open5ETools.Core.Tests;
 public class TestFixture : IDisposable
@@ -11,6 +12,7 @@ public class TestFixture : IDisposable
     public readonly IAppDbContext Context;
     public readonly IDungeonNoCorridor DungeonNoCorridor;
     public readonly IEncounterService EncounterService;
+    public readonly ISpellService SpellService;
     private readonly TestEnvironment _env = new();
     private bool _disposedValue;
 
@@ -19,6 +21,7 @@ public class TestFixture : IDisposable
         DungeonService = _env.GetService<IDungeonService>();
         OptionService = _env.GetService<IOptionService>();
         EncounterService = _env.GetService<IEncounterService>();
+        SpellService = _env.GetService<ISpellService>();
         Context = _env.GetService<IAppDbContext>();
         DungeonNoCorridor = _env.GetNcDungeon();
     }

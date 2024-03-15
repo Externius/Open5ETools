@@ -1,6 +1,6 @@
 using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Helpers;
-using Open5ETools.Core.Common.Interfaces.DM.Generator;
+using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Services;
 using System.Text.Json;
@@ -453,9 +453,9 @@ public class Dungeon(IDungeonHelper dungeonHelper) : IDungeon
         var imgSizeY = DungeonHeight / DungeonSize;
         _roomCount = (int)Math.Round((float)DungeonSize / 100 * optionModel.RoomDensity);
         RoomSize = (int)Math.Round((float)(DungeonSize - Math.Round(DungeonSize * 0.35)) / 100 * RoomSizePercent);
-        RoomDescription = new List<RoomDescription>();
-        TrapDescription = new List<TrapDescription>();
-        RoamingMonsterDescription = new List<RoamingMonsterDescription>();
+        RoomDescription = [];
+        TrapDescription = [];
+        RoamingMonsterDescription = [];
         _trapCount = DungeonSize * optionModel.TrapPercent / 100;
         _roamingCount = DungeonSize * optionModel.RoamingPercent / 100;
         DungeonSize += 2; // because of boundaries

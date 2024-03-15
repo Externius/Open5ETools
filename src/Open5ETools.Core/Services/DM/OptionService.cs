@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Interfaces.Data;
-using Open5ETools.Core.Common.Interfaces.DM.Services;
+using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Models.DM.Services;
 
 namespace Open5ETools.Core.Services.DM;

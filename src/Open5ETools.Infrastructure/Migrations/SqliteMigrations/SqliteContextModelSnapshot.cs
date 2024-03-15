@@ -15,7 +15,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
             modelBuilder.Entity("Open5ETools.Core.Domain.DM.Dungeon", b =>
                 {
@@ -252,6 +252,105 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                     b.HasKey("Id");
 
                     b.ToTable("Monsters");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
+                });
+
+            modelBuilder.Entity("Open5ETools.Core.Domain.SM.Spell", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Archetype")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CastingTime")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Circles")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Components")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Concentration")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Domains")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Duration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HigherLevel")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Material")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Oaths")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Page")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Patrons")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Range")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ritual")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("School")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Spells");
 
                     b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });

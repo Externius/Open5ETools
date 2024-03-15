@@ -2,6 +2,7 @@
 using Open5ETools.Core.Domain;
 using Open5ETools.Core.Domain.DM;
 using Open5ETools.Core.Domain.EG;
+using Open5ETools.Core.Domain.SM;
 
 namespace Open5ETools.Infrastructure.Data;
 public class SqliteContext : AppDbContext
@@ -65,6 +66,12 @@ public class SqliteContext : AppDbContext
             {
                 ownedNavigationBuilder.ToJson();
             });
+
+        modelBuilder.Entity<Spell>().Metadata.UseSqlReturningClause(false);
+        modelBuilder.Entity<Spell>()
+            .Property(p => p.Timestamp)
+            .IsRowVersion()
+            .HasDefaultValueSql(CurrentTimestamp);            
     }
 
 #if DEBUG

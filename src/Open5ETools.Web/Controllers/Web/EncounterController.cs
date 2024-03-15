@@ -6,7 +6,7 @@ using Open5ETools.Core.Common.Enums.EG;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Extensions;
 using Open5ETools.Core.Common.Helpers;
-using Open5ETools.Core.Common.Interfaces.EG;
+using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Models.EG;
 using Open5ETools.Web.Models.Encounter;
 

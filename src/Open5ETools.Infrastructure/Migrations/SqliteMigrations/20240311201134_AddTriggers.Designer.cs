@@ -2,328 +2,420 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Open5ETools.Infrastructure.Data;
 
 #nullable disable
 
-namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
+namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
 {
-    [DbContext(typeof(SqlServerContext))]
-    [Migration("20240108121322_Init")]
-    partial class Init
+    [DbContext(typeof(SqliteContext))]
+    [Migration("20240311201134_AddTriggers")]
+    partial class AddTriggers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
             modelBuilder.Entity("Open5ETools.Core.Domain.DM.Dungeon", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("DungeonOptionId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("DungeonTiles")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Level")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("RoamingMonsterDescription")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoomDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("TrapDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DungeonOptionId");
 
                     b.ToTable("Dungeons");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });
 
             modelBuilder.Entity("Open5ETools.Core.Domain.DM.DungeonOption", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Corridor")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("DeadEnd")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("DungeonDifficulty")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("DungeonName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("DungeonSize")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ItemsRarity")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MonsterType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PartyLevel")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("PartySize")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("RoamingPercent")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomDensity")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomSize")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("TrapPercent")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("TreasureValue")
-                        .HasColumnType("float");
+                        .HasColumnType("REAL");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("DungeonName", "UserId")
-                        .IsUnique();
-
                     b.ToTable("DungeonOptions");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });
 
             modelBuilder.Entity("Open5ETools.Core.Domain.DM.Option", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Key")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Key", "Name")
-                        .IsUnique();
-
                     b.ToTable("Options");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });
 
             modelBuilder.Entity("Open5ETools.Core.Domain.DM.Treasure", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
                     b.ToTable("Treasures");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });
 
             modelBuilder.Entity("Open5ETools.Core.Domain.EG.Monster", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
                     b.ToTable("Monsters");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
+                });
+
+            modelBuilder.Entity("Open5ETools.Core.Domain.SM.Spell", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Archetype")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CastingTime")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Circles")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Components")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Concentration")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Domains")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Duration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HigherLevel")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Material")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Oaths")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Page")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Patrons")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Range")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ritual")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("School")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Spells");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });
 
             modelBuilder.Entity("Open5ETools.Core.Domain.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("BLOB")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasAnnotation("Sqlite:UseSqlReturningClause", false);
                 });
 
             modelBuilder.Entity("Open5ETools.Core.Domain.DM.Dungeon", b =>
@@ -353,24 +445,24 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                     b.OwnsOne("Open5ETools.Core.Common.Models.DM.Generator.TreasureDescription", "TreasureDescription", b1 =>
                         {
                             b1.Property<int>("TreasureId")
-                                .HasColumnType("int");
+                                .HasColumnType("INTEGER");
 
                             b1.Property<int>("Cost")
-                                .HasColumnType("int");
+                                .HasColumnType("INTEGER");
 
                             b1.Property<bool>("Magical")
-                                .HasColumnType("bit");
+                                .HasColumnType("INTEGER");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("TEXT");
 
                             b1.Property<int>("Rarity")
-                                .HasColumnType("int");
+                                .HasColumnType("INTEGER");
 
                             b1.Property<string>("Types")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("TreasureId");
 
@@ -391,185 +483,185 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                     b.OwnsOne("Open5ETools.Core.Common.Models.Json.Monster", "JsonMonster", b1 =>
                         {
                             b1.Property<int>("MonsterId")
-                                .HasColumnType("int");
+                                .HasColumnType("INTEGER");
 
                             b1.Property<int?>("Acrobatics")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "acrobatics");
 
                             b1.Property<string>("Alignment")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "alignment");
 
                             b1.Property<int?>("Arcana")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "arcana");
 
                             b1.Property<int?>("ArmorClass")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "armor_class");
 
                             b1.Property<int?>("Athletics")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "athletics");
 
                             b1.Property<string>("ChallengeRating")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "challenge_rating");
 
                             b1.Property<int?>("Charisma")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "charisma");
 
                             b1.Property<int?>("CharismaSave")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "charisma_save");
 
                             b1.Property<string>("ConditionImmunities")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "condition_immunities");
 
                             b1.Property<int?>("Constitution")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "constitution");
 
                             b1.Property<int?>("ConstitutionSave")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "constitution_save");
 
                             b1.Property<string>("DamageImmunities")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "damage_immunities");
 
                             b1.Property<string>("DamageResistances")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "damage_resistances");
 
                             b1.Property<string>("DamageVulnerabilities")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "damage_vulnerabilities");
 
                             b1.Property<int?>("Deception")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "deception");
 
                             b1.Property<int?>("Dexterity")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "dexterity");
 
                             b1.Property<int?>("DexteritySave")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "dexterity_save");
 
                             b1.Property<int?>("History")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "history");
 
                             b1.Property<string>("HitDice")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "hit_dice");
 
                             b1.Property<int?>("HitPoints")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "hit_points");
 
                             b1.Property<int?>("Insight")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "insight");
 
                             b1.Property<int?>("Intelligence")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "intelligence");
 
                             b1.Property<int?>("IntelligenceSave")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "intelligence_save");
 
                             b1.Property<int?>("Intimidation")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "intimidation");
 
                             b1.Property<int?>("Investigation")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "investigation");
 
                             b1.Property<string>("Languages")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "languages");
 
                             b1.Property<int?>("Medicine")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "medicine");
 
                             b1.Property<string>("Name")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "name");
 
                             b1.Property<int?>("Nature")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "nature");
 
                             b1.Property<int?>("Perception")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "perception");
 
                             b1.Property<int?>("Performance")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "performance");
 
                             b1.Property<int?>("Persuasion")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "persuasion");
 
                             b1.Property<int?>("Religion")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "religion");
 
                             b1.Property<string>("Senses")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "senses");
 
                             b1.Property<string>("Size")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "size");
 
                             b1.Property<string>("Speed")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "speed");
 
                             b1.Property<int?>("Stealth")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "stealth");
 
                             b1.Property<int?>("Strength")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "strength");
 
                             b1.Property<int?>("StrengthSave")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "strength_save");
 
                             b1.Property<string>("Subtype")
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "subtype");
 
                             b1.Property<int?>("Survival")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "survival");
 
                             b1.Property<string>("Type")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("TEXT")
                                 .HasAnnotation("Relational:JsonPropertyName", "type");
 
                             b1.Property<int?>("Wisdom")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "wisdom");
 
                             b1.Property<int?>("WisdomSave")
-                                .HasColumnType("int")
+                                .HasColumnType("INTEGER")
                                 .HasAnnotation("Relational:JsonPropertyName", "wisdom_save");
 
                             b1.HasKey("MonsterId");
@@ -584,30 +676,30 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                             b1.OwnsMany("Open5ETools.Core.Common.Models.Json.Action", "Actions", b2 =>
                                 {
                                     b2.Property<int>("MonsterId")
-                                        .HasColumnType("int");
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("int");
+                                        .ValueGeneratedOnAddOrUpdate()
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int?>("AttackBonus")
-                                        .HasColumnType("int")
+                                        .HasColumnType("INTEGER")
                                         .HasAnnotation("Relational:JsonPropertyName", "attack_bonus");
 
                                     b2.Property<int?>("DamageBonus")
-                                        .HasColumnType("int")
+                                        .HasColumnType("INTEGER")
                                         .HasAnnotation("Relational:JsonPropertyName", "damage_bonus");
 
                                     b2.Property<string>("DamageDice")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "damage_dice");
 
                                     b2.Property<string>("Desc")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "desc");
 
                                     b2.Property<string>("Name")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
                                     b2.HasKey("MonsterId", "Id");
@@ -623,26 +715,26 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                             b1.OwnsMany("Open5ETools.Core.Common.Models.Json.LegendaryAction", "LegendaryActions", b2 =>
                                 {
                                     b2.Property<int>("MonsterId")
-                                        .HasColumnType("int");
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("int");
+                                        .ValueGeneratedOnAddOrUpdate()
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int?>("AttackBonus")
-                                        .HasColumnType("int")
+                                        .HasColumnType("INTEGER")
                                         .HasAnnotation("Relational:JsonPropertyName", "attack_bonus");
 
                                     b2.Property<string>("DamageDice")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "damage_dice");
 
                                     b2.Property<string>("Desc")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "desc");
 
                                     b2.Property<string>("Name")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
                                     b2.HasKey("MonsterId", "Id");
@@ -658,22 +750,22 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                             b1.OwnsMany("Open5ETools.Core.Common.Models.Json.Reaction", "Reactions", b2 =>
                                 {
                                     b2.Property<int>("MonsterId")
-                                        .HasColumnType("int");
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("int");
+                                        .ValueGeneratedOnAddOrUpdate()
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int?>("AttackBonus")
-                                        .HasColumnType("int")
+                                        .HasColumnType("INTEGER")
                                         .HasAnnotation("Relational:JsonPropertyName", "attack_bonus");
 
                                     b2.Property<string>("Desc")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "desc");
 
                                     b2.Property<string>("Name")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
                                     b2.HasKey("MonsterId", "Id");
@@ -689,26 +781,26 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                             b1.OwnsMany("Open5ETools.Core.Common.Models.Json.SpecialAbility", "SpecialAbilities", b2 =>
                                 {
                                     b2.Property<int>("MonsterId")
-                                        .HasColumnType("int");
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("int");
+                                        .ValueGeneratedOnAddOrUpdate()
+                                        .HasColumnType("INTEGER");
 
                                     b2.Property<int?>("AttackBonus")
-                                        .HasColumnType("int")
+                                        .HasColumnType("INTEGER")
                                         .HasAnnotation("Relational:JsonPropertyName", "attack_bonus");
 
                                     b2.Property<string>("DamageDice")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "damage_dice");
 
                                     b2.Property<string>("Desc")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "desc");
 
                                     b2.Property<string>("Name")
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("TEXT")
                                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
                                     b2.HasKey("MonsterId", "Id");

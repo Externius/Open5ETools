@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -42,6 +43,42 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Options", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Spells",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Desc = table.Column<string>(type: "TEXT", nullable: false),
+                    HigherLevel = table.Column<string>(type: "TEXT", nullable: true),
+                    Page = table.Column<string>(type: "TEXT", nullable: false),
+                    Range = table.Column<string>(type: "TEXT", nullable: false),
+                    Components = table.Column<string>(type: "TEXT", nullable: false),
+                    Material = table.Column<string>(type: "TEXT", nullable: true),
+                    Ritual = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Duration = table.Column<string>(type: "TEXT", nullable: true),
+                    Concentration = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CastingTime = table.Column<string>(type: "TEXT", nullable: false),
+                    Level = table.Column<string>(type: "TEXT", nullable: false),
+                    School = table.Column<int>(type: "INTEGER", nullable: false),
+                    Class = table.Column<string>(type: "TEXT", nullable: false),
+                    Archetype = table.Column<string>(type: "TEXT", nullable: true),
+                    Circles = table.Column<string>(type: "TEXT", nullable: true),
+                    Domains = table.Column<string>(type: "TEXT", nullable: true),
+                    Oaths = table.Column<string>(type: "TEXT", nullable: true),
+                    Patrons = table.Column<string>(type: "TEXT", nullable: true),
+                    Timestamp = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Spells", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,6 +212,9 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
 
             migrationBuilder.DropTable(
                 name: "Options");
+
+            migrationBuilder.DropTable(
+                name: "Spells");
 
             migrationBuilder.DropTable(
                 name: "Treasures");

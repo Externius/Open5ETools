@@ -1,7 +1,7 @@
 using Open5ETools.Core.Common;
 using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Helpers;
-using Open5ETools.Core.Common.Interfaces.DM.Generator;
+using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Services;
 using System.Text.Json;
@@ -42,7 +42,7 @@ public class DungeonNoCorridor(IDungeonHelper dungeonHelper) : Dungeon(dungeonHe
         var imgSizeX = DungeonWidth / DungeonSize;
         var imgSizeY = DungeonHeight / DungeonSize;
         RoomSize = (int)Math.Round((float)(DungeonSize - Math.Round(DungeonSize * 0.35)) / 100 * RoomSizePercent);
-        RoomDescription = new List<RoomDescription>();
+        RoomDescription = [];
         DungeonSize += 2; // because of boundaries
         DungeonTiles = _dungeonHelper.GenerateDungeonTiles(DungeonSize, imgSizeX, imgSizeY);
     }
@@ -526,7 +526,7 @@ public class DungeonNoCorridor(IDungeonHelper dungeonHelper) : Dungeon(dungeonHe
     public void AddFirstRoom()
     {
         _roomStart = [];
-        OpenDoorList = new List<DungeonTile>();
+        OpenDoorList = [];
         var x = DungeonHelper.GetRandomInt(5, DungeonTiles.Length - (RoomSize + 4));
         var y = DungeonHelper.GetRandomInt(5, DungeonTiles.Length - (RoomSize + 4));
         var right = DungeonHelper.GetRandomInt(2, RoomSize + 1);

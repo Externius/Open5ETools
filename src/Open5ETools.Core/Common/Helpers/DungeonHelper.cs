@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Extensions;
 using Open5ETools.Core.Common.Interfaces.Data;
-using Open5ETools.Core.Common.Interfaces.DM.Generator;
+using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Services;
 using Open5ETools.Core.Helpers;

@@ -1,4 +1,4 @@
-﻿using Open5ETools.Core.Common.Interfaces.DM.Services;
+﻿using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Models.DM.Services;
 using Shouldly;
 

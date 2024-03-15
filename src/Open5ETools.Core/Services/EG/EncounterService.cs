@@ -7,7 +7,7 @@ using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Extensions;
 using Open5ETools.Core.Common.Helpers;
 using Open5ETools.Core.Common.Interfaces.Data;
-using Open5ETools.Core.Common.Interfaces.EG;
+using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Models.EG;
 using Open5ETools.Core.Domain.EG;
 
@@ -44,13 +44,13 @@ public class EncounterService(
         ValidateOption(option);
         _partyLevel = option.PartyLevel;
         _partySize = option.PartySize;
-        _xpList = new List<KeyValuePair<Difficulty, int>>
-        {
+        _xpList =
+        [
             new(Difficulty.Easy , Constants.Thresholds[_partyLevel, 0] * _partySize),
             new(Difficulty.Medium , Constants.Thresholds[_partyLevel, 1] * _partySize),
             new(Difficulty.Hard , Constants.Thresholds[_partyLevel, 2] * _partySize),
             new(Difficulty.Deadly , Constants.Thresholds[_partyLevel, 3] * _partySize)
-        };
+        ];
         try
         {
             _monsters = [.. _context.Monsters.AsNoTracking()];

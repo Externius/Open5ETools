@@ -162,6 +162,9 @@
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
   <data name="Difficulty" xml:space="preserve">
     <value>Difficulty</value>
   </data>
@@ -211,16 +214,19 @@
     <value>Contact</value>
   </data>
   <data name="NavDungeons" xml:space="preserve">
-    <value>Dungeons</value>
+    <value>Dungeon generator</value>
   </data>
   <data name="NavEncounter" xml:space="preserve">
-    <value>Encounters</value>
+    <value>Encounter generator</value>
   </data>
   <data name="NavHome" xml:space="preserve">
     <value>Open5ETools</value>
   </data>
   <data name="NavLogout" xml:space="preserve">
     <value>Logout</value>
+  </data>
+  <data name="NavSpells" xml:space="preserve">
+    <value>Spells</value>
   </data>
   <data name="NavUserManagement" xml:space="preserve">
     <value>User management</value>
@@ -248,6 +254,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>

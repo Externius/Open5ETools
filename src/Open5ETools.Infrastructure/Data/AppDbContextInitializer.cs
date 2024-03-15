@@ -1,21 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Open5ETools.Core.Common.Configurations;
 using Open5ETools.Core.Common.Enums;
 using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Helpers;
 using Open5ETools.Core.Common.Interfaces.Data;
-using Open5ETools.Core.Common.Interfaces.DM.Services;
+using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Models.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Services;
 using Open5ETools.Core.Common.Models.Json;
 using Open5ETools.Core.Domain;
 using Open5ETools.Core.Domain.DM;
 using Open5ETools.Core.Helpers;
+using Spell = Open5ETools.Core.Common.Models.Json.Spell;
 
 namespace Open5ETools.Infrastructure.Data;
-public class AppDbContextInitializer(IAppDbContext context, IDungeonService dungeonService, IOptions<AppConfigOptions> config)
+public class AppDbContextInitializer(
+    IMapper mapper,
+    IAppDbContext context,
+    IDungeonService dungeonService,
+    IOptions<AppConfigOptions> config)
 {
+    private readonly IMapper _mapper = mapper;
     private readonly IAppDbContext _context = context;
     private readonly IDungeonService _dungeonService = dungeonService;
 
@@ -39,6 +46,7 @@ public class AppDbContextInitializer(IAppDbContext context, IDungeonService dung
             await SeedTreasuresAsync(cancellationToken);
             await SeedOptionsAsync(cancellationToken);
             await SeedDungeonsAsync(cancellationToken, 1);
+            await SeedSpellsAsync(cancellationToken);
         }
     }
 
@@ -52,7 +60,21 @@ public class AppDbContextInitializer(IAppDbContext context, IDungeonService dung
             await SeedOptionsAsync(cancellationToken);
             await SeedDungeonsAsync(cancellationToken, 1);
             await SeedDungeonsAsync(cancellationToken, 2);
+            await SeedSpellsAsync(cancellationToken);
         }
+    }
+
+    private async Task SeedSpellsAsync(CancellationToken cancellationToken)
+    {
+        var spells = JsonHelper.DeserializeJson<Spell>(JsonHelper.SpellFileName);
+        var spellEntities = new List<Core.Domain.SM.Spell>();
+        foreach (var spell in spells)
+        {
+            spellEntities.Add(_mapper.Map<Core.Domain.SM.Spell>(spell));
+        }
+
+        await _context.Spells.AddRangeAsync(spellEntities, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task SeedTreasuresAsync(CancellationToken cancellationToken)

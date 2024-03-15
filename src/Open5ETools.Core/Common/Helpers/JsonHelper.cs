@@ -6,6 +6,7 @@ public static class JsonHelper
 {
     public const string MonsterFileName = "5e-SRD-Monsters.json";
     public const string TreasureFileName = "treasures.json";
+    public const string SpellFileName = "5e-SRD-Spells.json";
     private static readonly JsonSerializerOptions _options = new()
     {
         PropertyNameCaseInsensitive = true,

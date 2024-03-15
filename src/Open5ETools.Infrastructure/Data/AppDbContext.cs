@@ -3,6 +3,7 @@ using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Domain;
 using Open5ETools.Core.Domain.DM;
 using Open5ETools.Core.Domain.EG;
+using Open5ETools.Core.Domain.SM;
 using Open5ETools.Infrastructure.Extensions;
 
 namespace Open5ETools.Infrastructure.Data;
@@ -20,6 +21,7 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Option> Options { get; set; }
     public DbSet<Monster> Monsters { get; set; }
     public DbSet<Treasure> Treasures { get; set; }
+    public DbSet<Spell> Spells { get; set; }
     public AppDbContext()
     {
 

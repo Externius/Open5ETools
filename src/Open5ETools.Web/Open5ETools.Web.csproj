@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TieredCompilation>true</TieredCompilation>
 		<PreserveCompilationReferences>true</PreserveCompilationReferences>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -16,6 +16,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="X.PagedList" />
+    <PackageReference Include="X.PagedList.Mvc.Core" />
 	</ItemGroup>
 
   <ItemGroup>

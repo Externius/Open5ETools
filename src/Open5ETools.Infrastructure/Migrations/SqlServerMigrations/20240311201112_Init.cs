@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -42,6 +43,42 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Options", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Spells",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HigherLevel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Page = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Range = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Components = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Material = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ritual = table.Column<bool>(type: "bit", nullable: false),
+                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Concentration = table.Column<bool>(type: "bit", nullable: false),
+                    CastingTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    School = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Class = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Archetype = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Circles = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Domains = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Oaths = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Patrons = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Spells", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,6 +224,9 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
 
             migrationBuilder.DropTable(
                 name: "Options");
+
+            migrationBuilder.DropTable(
+                name: "Spells");
 
             migrationBuilder.DropTable(
                 name: "Treasures");

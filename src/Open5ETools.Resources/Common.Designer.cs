@@ -196,6 +196,15 @@ namespace Open5ETools.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Difficulty.
         /// </summary>
         public static string Difficulty {
@@ -340,7 +349,7 @@ namespace Open5ETools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dungeons.
+        ///   Looks up a localized string similar to Dungeon generator.
         /// </summary>
         public static string NavDungeons {
             get {
@@ -349,7 +358,7 @@ namespace Open5ETools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encounters.
+        ///   Looks up a localized string similar to Encounter generator.
         /// </summary>
         public static string NavEncounter {
             get {
@@ -372,6 +381,15 @@ namespace Open5ETools.Resources {
         public static string NavLogout {
             get {
                 return ResourceManager.GetString("NavLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spells.
+        /// </summary>
+        public static string NavSpells {
+            get {
+                return ResourceManager.GetString("NavSpells", resourceCulture);
             }
         }
         
@@ -453,6 +471,15 @@ namespace Open5ETools.Resources {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         
