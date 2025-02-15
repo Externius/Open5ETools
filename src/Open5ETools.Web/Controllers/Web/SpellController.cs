@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Open5ETools.Core.Common.Interfaces.Services.SM;
 using Open5ETools.Web.Models;
 using Open5ETools.Web.Models.Spell;
-using X.PagedList;
 
 namespace Open5ETools.Web.Controllers.Web;
 

@@ -10,6 +10,7 @@ using Open5ETools.Infrastructure.Interceptors;
 using System.Reflection;
 
 namespace Open5ETools.Infrastructure;
+
 public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(
@@ -22,10 +23,11 @@ public static class ConfigureServices
                 services.AddDbContext<SqlServerContext>((sp, options) =>
                 {
                     options.UseSqlServer(configuration.GetConnectionString(AppDbContext.Open5ETools),
-                        sqlServerOptionsAction: sqlOptions =>
-                        {
-                            sqlOptions.MigrationsAssembly(typeof(SqlServerContext).GetTypeInfo().Assembly.GetName().Name);
-                        })
+                            sqlServerOptionsAction: sqlOptions =>
+                            {
+                                sqlOptions.MigrationsAssembly(typeof(SqlServerContext).GetTypeInfo().Assembly.GetName()
+                                    .Name);
+                            })
                         .AddInterceptors(
                             ActivatorUtilities.CreateInstance<AuditEntitiesSaveChangesInterceptor>(sp));
                 });
@@ -40,10 +42,11 @@ public static class ConfigureServices
                 services.AddDbContext<SqliteContext>((sp, options) =>
                 {
                     options.UseSqlite(connString?.Replace(SqliteContext.HomeToken, home),
-                        sqliteOptionsAction: sqlOptions =>
-                        {
-                            sqlOptions.MigrationsAssembly(typeof(SqliteContext).GetTypeInfo().Assembly.GetName().Name);
-                        })
+                            sqliteOptionsAction: sqlOptions =>
+                            {
+                                sqlOptions.MigrationsAssembly(typeof(SqliteContext).GetTypeInfo().Assembly.GetName()
+                                    .Name);
+                            })
                         .AddInterceptors(
                             ActivatorUtilities.CreateInstance<AuditEntitiesSaveChangesInterceptor>(sp));
                 });
@@ -54,7 +57,8 @@ public static class ConfigureServices
                 break;
             default:
                 throw new ServiceException(
-                    string.Format(Resources.Error.DbProviderError, configuration.GetConnectionString(AppDbContext.DbProvider)));
+                    string.Format(Resources.Error.DbProviderError,
+                        configuration.GetConnectionString(AppDbContext.DbProvider)));
         }
 
         AddOptions(services, configuration);
@@ -65,9 +69,9 @@ public static class ConfigureServices
     private static void AddOptions(IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions<AppConfigOptions>()
-                .Bind(configuration.GetSection(AppConfigOptions.AppConfig))
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
+            .Bind(configuration.GetSection(AppConfigOptions.AppConfig))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
     }
 
     public static IServiceCollection AddTestInfrastructureServices(this IServiceCollection services,
@@ -77,10 +81,10 @@ public static class ConfigureServices
         services.AddDbContext<SqliteContext>((sp, options) =>
         {
             options.UseSqlite(connection,
-                sqliteOptionsAction: sqlOptions =>
-                {
-                    sqlOptions.MigrationsAssembly(typeof(SqliteContext).GetTypeInfo().Assembly.GetName().Name);
-                })
+                    sqliteOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly(typeof(SqliteContext).GetTypeInfo().Assembly.GetName().Name);
+                    })
                 .AddInterceptors(ActivatorUtilities.CreateInstance<AuditEntitiesSaveChangesInterceptor>(sp));
         });
         services.AddScoped<IAppDbContext, SqliteContext>(sp =>

@@ -2,13 +2,12 @@
 
 @{
     ViewData["Title"] = Resources.Spell.Title;
-
 }
 
 <form asp-action="Index" method="get">
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <input asp-for="Search" type="text" />
+            <input asp-for="Search" type="text"/>
         </div>
         <div class="col-auto">
             <input type="submit" value="@Resources.Common.Search" class="btn btn-primary">
@@ -18,110 +17,111 @@
 
 <table class="table table-hover">
     <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-sort="Level" asp-route-page="@Model.PageIndex"
-                    asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
-                    @Resources.Spell.Level
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sort="Name" asp-route-page="@Model.PageIndex"
-                    asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
-                    @Resources.Spell.Name
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sort="Duration" asp-route-page="@Model.PageIndex"
-                    asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
-                    @Resources.Spell.Duration
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sort="CastingTime" asp-route-page="@Model.PageIndex"
-                    asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
-                    @Resources.Spell.CastingTime
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sort="Range" asp-route-page="@Model.PageIndex"
-                    asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
-                    @Resources.Spell.Range
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sort="Components" asp-route-page="@Model.PageIndex"
-                    asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
-                    @Resources.Spell.Components
-                </a>
-            </th>
-            <th>
-                @Model.SortColumn
-                <partial name="_SortIndicator" model="@Model.Ascending" />
-            </th>
-        </tr>
+    <tr>
+        <th>
+            <a asp-action="Index" asp-route-sort="Level" asp-route-page="@Model.PageIndex"
+               asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
+                @Resources.Spell.Level
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sort="Name" asp-route-page="@Model.PageIndex"
+               asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
+                @Resources.Spell.Name
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sort="Duration" asp-route-page="@Model.PageIndex"
+               asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
+                @Resources.Spell.Duration
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sort="CastingTime" asp-route-page="@Model.PageIndex"
+               asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
+                @Resources.Spell.CastingTime
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sort="Range" asp-route-page="@Model.PageIndex"
+               asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
+                @Resources.Spell.Range
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sort="Components" asp-route-page="@Model.PageIndex"
+               asp-route-ascending="@Model.ChangeOrder()" asp-route-search=@Model.Search>
+                @Resources.Spell.Components
+            </a>
+        </th>
+        <th>
+            @Model.SortColumn
+            <partial name="_SortIndicator" model="@Model.Ascending"/>
+        </th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Level)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Duration)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CastingTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Range)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Components)
-                </td>
-                <td>
-                    <button type="button" class="btn btn-link btn-lg" id="spellDetail" data-spell-id="@item.Id"
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Level)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CastingTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Range)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Components)
+            </td>
+            <td>
+                <button type="button" class="btn btn-link btn-lg" id="spellDetail" data-spell-id="@item.Id"
                         title="Spell details">
-                        <i class="fa fa-th-list fa-xl"></i>
-                    </button>
-                </td>
-            </tr>
-        }
+                    <i class="fa fa-th-list fa-xl"></i>
+                </button>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
 
 @Html.PagedListPager(Model.Items, page => Url.Action("Index", new
-    {
-        page,
-        sort = Model.SortColumn,
-        ascending = Model.Ascending,
-        search = Model.Search
-    }), new X.PagedList.Web.Common.PagedListRenderOptions
 {
-    PageClasses = new string[] { "page-link" },
-    UlElementClasses = new string[] { "pagination" },
-    LiElementClasses = new string[] { "page-item" }
+    page,
+    sort = Model.SortColumn,
+    ascending = Model.Ascending,
+    search = Model.Search
+}), new PagedListRenderOptions
+{
+    PageClasses = ["page-link"],
+    UlElementClasses = ["pagination"],
+    LiElementClasses = ["page-item"]
 })
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <partial name="_AjaxScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_AjaxScriptsPartial"/>
     <script>
         $(document).ready(function () {
             $(document).on('click', '#spellDetail', function (e) {
                 e.preventDefault();
-                var id = $(this).data('spell-id');
+                const id = $(this).data('spell-id');
+                const modal = $('#modal');
                 $.ajax({
                     url: '@Url.Action("Detail", "Spell")',
                     method: "GET",
-                    data: { id: id },
+                    data: {id: id},
                     success: function (result) {
-                        $('#modal').html(result);
-                        $('#modal').modal('toggle');
+                        modal.html(result);
+                        modal.modal('toggle');
                     }
                 });
             });

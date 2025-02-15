@@ -14,7 +14,7 @@ public class List(TestFixture fixture) : IClassFixture<TestFixture>
     public async Task ListAsync_WithoutSearchParameter_ReturnsAllSpells()
     {
         var expectedCount = _context.Spells.AsNoTracking().Count();
-        var result = await _spellService.ListAsync();
+        var result = await _spellService.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         result.Count().ShouldBe(expectedCount);
     }
 
@@ -25,7 +25,7 @@ public class List(TestFixture fixture) : IClassFixture<TestFixture>
     [InlineData("Acid", 2)]
     public async Task ListAsync_WithSearchParameter_ReturnsFilteredSpells(string search, int expectedCount)
     {
-        var result = await _spellService.ListAsync(search);
+        var result = await _spellService.ListAsync(search, TestContext.Current.CancellationToken);
         result.Count().ShouldBe(expectedCount);
     }
 }

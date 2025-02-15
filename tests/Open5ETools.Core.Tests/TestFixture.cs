@@ -5,6 +5,7 @@ using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Interfaces.Services.SM;
 
 namespace Open5ETools.Core.Tests;
+
 public class TestFixture : IDisposable
 {
     public readonly IDungeonService DungeonService;

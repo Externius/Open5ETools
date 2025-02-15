@@ -7,7 +7,7 @@ public interface IDungeonService
     Task<IEnumerable<DungeonOptionModel>> GetAllDungeonOptionsAsync(CancellationToken cancellationToken);
     Task<IEnumerable<DungeonOptionModel>> GetAllDungeonOptionsForUserAsync(int userId, CancellationToken cancellationToken);
     Task<DungeonOptionModel> GetDungeonOptionAsync(int id, CancellationToken cancellationToken);
-    Task<DungeonOptionModel> GetDungeonOptionByNameAsync(string dungeonName, int userId, CancellationToken cancellationToken);
+    Task<DungeonOptionModel?> GetDungeonOptionByNameAsync(string dungeonName, int userId, CancellationToken cancellationToken);
     Task<DungeonModel> GetDungeonAsync(int id, CancellationToken cancellationToken);
     Task<DungeonModel> CreateOrUpdateDungeonAsync(DungeonOptionModel optionModel, bool addDungeon, int level, CancellationToken cancellationToken);
     Task UpdateDungeonAsync(DungeonModel model, CancellationToken cancellationToken);
@@ -19,4 +19,5 @@ public interface IDungeonService
     Task<bool> DeleteDungeonAsync(int id, CancellationToken cancellationToken);
     Task<DungeonModel> GenerateDungeonAsync(DungeonOptionModel model);
     Task RenameDungeonAsync(int optionId, int userId, string newName, CancellationToken cancellationToken);
+    Task<string> ExportToJsonAsync(int dungeonId, CancellationToken cancellationToken);
 }

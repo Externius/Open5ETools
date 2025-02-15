@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Open5ETools.Web/bin/Debug/net8.0/Open5ETools.Web.dll",
+            "program": "${workspaceFolder}/src/Open5ETools.Web/bin/Debug/net9.0/Open5ETools.Web.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Open5ETools.Web",
             "stopAtEntry": false,

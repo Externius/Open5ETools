@@ -60,7 +60,7 @@ public class EncounterController(
         try
         {
             var encounters = await _encounterService.GenerateAsync(option);
-            var model = new EncounterViewModel()
+            var model = new EncounterViewModel
             {
                 Details = encounters.Monsters.Select(_mapper.Map<MonsterViewModel>),
                 SumXp = encounters.SumXp
