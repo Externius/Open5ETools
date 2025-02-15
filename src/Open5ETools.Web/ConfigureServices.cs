@@ -6,6 +6,7 @@ using Open5ETools.Infrastructure.Data;
 using Open5ETools.Web.Services;
 using Serilog;
 using System.Globalization;
+using Open5ETools.Web.Automapper;
 
 namespace Open5ETools.Web;
 
@@ -47,6 +48,7 @@ public static class ConfigureServices
                 options.AccessDeniedPath = new PathString("/Auth/Forbidden/");
             });
 
+        services.AddAutoMapper(cfg => { cfg.AllowNullCollections = true; }, typeof(AuthProfile));
         services.AddMemoryCache();
 
         services.AddMvc()
@@ -77,7 +79,7 @@ public static class ConfigureServices
             default:
                 throw new ServiceException(
                     string.Format(Resources.Error.DbProviderError,
-                    configuration.GetConnectionString(AppDbContext.DbProvider)));
+                        configuration.GetConnectionString(AppDbContext.DbProvider)));
         }
 
         return host;

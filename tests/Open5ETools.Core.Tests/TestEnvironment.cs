@@ -15,6 +15,7 @@ public sealed class TestEnvironment : IDisposable
     private readonly IServiceScope _scope;
     private SqliteConnection Connection { get; }
     private bool _disposedValue;
+
     public TestEnvironment()
     {
         var configurationBuilder = new ConfigurationBuilder();
@@ -126,8 +127,8 @@ public sealed class TestEnvironment : IDisposable
 
         if (disposing)
         {
-            Connection?.Dispose();
-            _scope?.Dispose();
+            Connection.Dispose();
+            _scope.Dispose();
         }
 
         _disposedValue = true;

@@ -16,6 +16,7 @@ using Open5ETools.Core.Helpers;
 using Spell = Open5ETools.Core.Common.Models.Json.Spell;
 
 namespace Open5ETools.Infrastructure.Data;
+
 public class AppDbContextInitializer(
     IMapper mapper,
     IAppDbContext context,
@@ -37,6 +38,7 @@ public class AppDbContextInitializer(
             await _context.Database.EnsureCreatedAsync(cancellationToken);
         }
     }
+
     public async Task SeedDataAsync(CancellationToken cancellationToken)
     {
         if (!_context.Users.Any())
@@ -67,11 +69,7 @@ public class AppDbContextInitializer(
     private async Task SeedSpellsAsync(CancellationToken cancellationToken)
     {
         var spells = JsonHelper.DeserializeJson<Spell>(JsonHelper.SpellFileName);
-        var spellEntities = new List<Core.Domain.SM.Spell>();
-        foreach (var spell in spells)
-        {
-            spellEntities.Add(_mapper.Map<Core.Domain.SM.Spell>(spell));
-        }
+        var spellEntities = spells.Select(spell => _mapper.Map<Core.Domain.SM.Spell>(spell)).ToList();
 
         await _context.Spells.AddRangeAsync(spellEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -80,14 +78,7 @@ public class AppDbContextInitializer(
     private async Task SeedTreasuresAsync(CancellationToken cancellationToken)
     {
         var treasures = JsonHelper.DeserializeJson<TreasureDescription>(JsonHelper.TreasureFileName);
-        var treasureEntities = new List<Treasure>();
-        foreach (var treasure in treasures)
-        {
-            treasureEntities.Add(new Treasure
-            {
-                TreasureDescription = treasure
-            });
-        }
+        var treasureEntities = treasures.Select(treasure => new Treasure { TreasureDescription = treasure }).ToList();
 
         await _context.Treasures.AddRangeAsync(treasureEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -96,16 +87,9 @@ public class AppDbContextInitializer(
     private async Task SeedMonstersAsync(CancellationToken cancellationToken)
     {
         var monsters = JsonHelper.DeserializeJson<Monster>(JsonHelper.MonsterFileName);
-        var monsterEntites = new List<Core.Domain.EG.Monster>();
-        foreach (var monster in monsters)
-        {
-            monsterEntites.Add(new Core.Domain.EG.Monster
-            {
-                JsonMonster = monster
-            });
-        }
+        var monsterEntities = monsters.Select(monster => new Core.Domain.EG.Monster { JsonMonster = monster }).ToList();
 
-        await _context.Monsters.AddRangeAsync(monsterEntites, cancellationToken);
+        await _context.Monsters.AddRangeAsync(monsterEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
@@ -409,7 +393,7 @@ public class AppDbContextInitializer(
             new()
             {
                 Key = OptionKey.TreasureValue,
-                Name =  Resources.Common.Standard,
+                Name = Resources.Common.Standard,
                 Value = "1"
             },
             new()

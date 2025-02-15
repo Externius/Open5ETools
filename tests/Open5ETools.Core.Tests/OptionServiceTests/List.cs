@@ -15,17 +15,18 @@ public class List(TestFixture fixture) : IClassFixture<TestFixture>
     public async Task ListOptionsAsync_WithNoFilter_ReturnsAllOptions()
     {
         var expectedCount = _context.Options.AsNoTracking().Count();
-        var result = await _optionService.ListOptionsAsync();
+        var result = await _optionService.ListOptionsAsync(cancellationToken: TestContext.Current.CancellationToken);
         result.Count().ShouldBe(expectedCount);
     }
 
     public static TheoryData<OptionKey> GetOptionKeys()
     {
         var result = new TheoryData<OptionKey>();
-        foreach (OptionKey key in Enum.GetValues(typeof(OptionKey)))
+        foreach (var key in Enum.GetValues<OptionKey>())
         {
             result.Add(key);
         }
+
         return result;
     }
 
@@ -33,8 +34,9 @@ public class List(TestFixture fixture) : IClassFixture<TestFixture>
     [MemberData(nameof(GetOptionKeys), MemberType = typeof(List))]
     public async Task ListOptionsAsync_WithFilter_ReturnsFilteredOptions(OptionKey filter)
     {
-        var expectedCount = (await _context.Options.Where(o => o.Key == filter).ToListAsync()).Count;
-        var result = await _optionService.ListOptionsAsync(filter);
+        var expectedCount = (await _context.Options.Where(o => o.Key == filter)
+            .ToListAsync(TestContext.Current.CancellationToken)).Count;
+        var result = await _optionService.ListOptionsAsync(filter, TestContext.Current.CancellationToken);
         result.Count().ShouldBe(expectedCount);
     }
 }

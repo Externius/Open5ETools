@@ -6,16 +6,15 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">@ViewData["Title"]</h5>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="@Resources.Common.Close">
-                <span aria-hidden="true">×</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="@Resources.Common.Close"></button>
         </div>
         <div class="modal-body">
             @RenderBody()
         </div>
         <div class="modal-footer">
-            @RenderSection("ModalFooter", required: false)
+            @await RenderSectionAsync("ModalFooter", required: false)
         </div>
     </div>
 </div>
-@RenderSection("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)

@@ -10,6 +10,7 @@ public class Get
 {
     private readonly IDungeonHelper _dungeonHelper;
     private readonly IDungeonNoCorridor _dungeonNoCorridor;
+
     public Get()
     {
         using var env = new TestEnvironment();
@@ -34,9 +35,9 @@ public class Get
     {
         return
         [
-            new(2, 2, 2, 2, 50, 50, Texture.NoCorridorDoor),
-            new(5, 5, 2, 2, 50, 50, Texture.NoCorridorDoorTrapped),
-            new(5, 2, 2, 2, 50, 50, Texture.NoCorridorDoorLocked)
+            new DungeonTile(2, 2, 2, 2, 50, 50, Texture.NoCorridorDoor),
+            new DungeonTile(5, 5, 2, 2, 50, 50, Texture.NoCorridorDoorTrapped),
+            new DungeonTile(5, 2, 2, 2, 50, 50, Texture.NoCorridorDoorLocked)
         ];
     }
 
@@ -67,6 +68,7 @@ public class Get
         {
             result[i] = _dungeonHelper.GetTreasure();
         }
+
         result.ShouldAllBe(s => !string.IsNullOrWhiteSpace(s));
     }
 
@@ -79,6 +81,7 @@ public class Get
         {
             result[i] = _dungeonHelper.GetMonsterDescription();
         }
+
         result.ShouldAllBe(s => !string.IsNullOrWhiteSpace(s));
     }
 
@@ -91,6 +94,7 @@ public class Get
         {
             result[i] = _dungeonHelper.GetRandomTrapDescription(i % 2 == 0);
         }
+
         result.ShouldAllBe(s => !string.IsNullOrWhiteSpace(s));
     }
 
@@ -103,6 +107,7 @@ public class Get
         {
             result[i] = _dungeonHelper.GetRoamingMonsterDescription();
         }
+
         result.ShouldAllBe(s => !string.IsNullOrWhiteSpace(s));
     }
 }

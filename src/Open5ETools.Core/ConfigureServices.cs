@@ -6,12 +6,14 @@ using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Interfaces.Services.SM;
 using Open5ETools.Core.Services;
+using Open5ETools.Core.Services.Automapper;
 using Open5ETools.Core.Services.DM;
 using Open5ETools.Core.Services.DM.Generator;
 using Open5ETools.Core.Services.EG;
 using Open5ETools.Core.Services.SM;
 
 namespace Open5ETools.Core;
+
 public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(
@@ -29,11 +31,7 @@ public static class ConfigureServices
             .AddScoped<IDungeonService, DungeonService>()
             .AddScoped<ISpellService, SpellService>();
 
-        services.AddAutoMapper(cfg =>
-            {
-                cfg.AllowNullCollections = true;
-            }
-            , AppDomain.CurrentDomain.GetAssemblies());
+        services.AddAutoMapper(cfg => { cfg.AllowNullCollections = true; }, typeof(UserProfile));
 
         return services;
     }

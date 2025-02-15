@@ -2,7 +2,6 @@ using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Models.DM.Generator;
 using System.Text;
-using Xunit.Abstractions;
 
 namespace Open5ETools.Core.Tests.GeneratorTests;
 
@@ -12,6 +11,7 @@ public abstract class DungeonTestBase
     private readonly StringBuilder _stringBuilder = new();
     protected readonly IDungeon Dungeon;
     protected readonly IDungeonNoCorridor DungeonNoCorridor;
+
     protected DungeonTestBase(ITestOutputHelper output)
     {
         var env = new TestEnvironment();
@@ -26,6 +26,7 @@ public abstract class DungeonTestBase
         {
             PrintRow(row);
         }
+
         _output.WriteLine(" ");
     }
 
@@ -72,6 +73,7 @@ public abstract class DungeonTestBase
                     break;
             }
         }
+
         _output.WriteLine(_stringBuilder.ToString());
         _stringBuilder.Clear();
     }

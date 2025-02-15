@@ -49,7 +49,8 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
         var encounterModel = await _encounterService.GenerateAsync(option);
         encounterModel.ShouldNotBeNull();
         encounterModel.Monsters.ShouldNotBeNull();
-        encounterModel.Monsters.TrueForAll(e => e.JsonMonsterModel.Difficulty.Equals(difficulty.ToString())).ShouldBeTrue();
+        encounterModel.Monsters.TrueForAll(e => e.JsonMonsterModel.Difficulty.Equals(difficulty.ToString()))
+            .ShouldBeTrue();
     }
 
     [Fact]
@@ -62,9 +63,6 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
             MonsterTypes = [MonsterType.Dragon],
             Difficulty = Difficulty.Easy
         };
-        await Should.ThrowAsync<ServiceException>(async () =>
-        {
-            await _encounterService.GenerateAsync(option);
-        });
+        await Should.ThrowAsync<ServiceException>(async () => { await _encounterService.GenerateAsync(option); });
     }
 }

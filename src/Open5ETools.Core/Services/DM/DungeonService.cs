@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Exceptions;
@@ -11,7 +12,8 @@ using Open5ETools.Resources;
 
 namespace Open5ETools.Core.Services.DM;
 
-public class DungeonService(IMapper mapper,
+public class DungeonService(
+    IMapper mapper,
     IAppDbContext context,
     IDungeon dungeon,
     IDungeonNoCorridor dungeonNcDungeon,
@@ -23,7 +25,8 @@ public class DungeonService(IMapper mapper,
     private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
-    public async Task<int> CreateDungeonOptionAsync(DungeonOptionModel dungeonOption, CancellationToken cancellationToken)
+    public async Task<int> CreateDungeonOptionAsync(DungeonOptionModel dungeonOption,
+        CancellationToken cancellationToken)
     {
         try
         {
@@ -67,7 +70,8 @@ public class DungeonService(IMapper mapper,
         }
     }
 
-    public async Task<DungeonModel> CreateOrUpdateDungeonAsync(DungeonOptionModel optionModel, bool addDungeon, int level, CancellationToken cancellationToken)
+    public async Task<DungeonModel> CreateOrUpdateDungeonAsync(DungeonOptionModel optionModel, bool addDungeon,
+        int level, CancellationToken cancellationToken)
     {
         try
         {
@@ -77,18 +81,21 @@ public class DungeonService(IMapper mapper,
                 return await AddDungeonToExistingOptionAsync(optionModel, level, cancellationToken);
             }
 
-            var existingDungeonOption = await GetDungeonOptionByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken);
+            var existingDungeonOption =
+                await GetDungeonOptionByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken);
             if (existingDungeonOption is null)
             {
                 return await CreateOptionAndAddDungeonToItAsync(optionModel, cancellationToken);
             }
 
             // regenerate
-            var existingDungeons = await ListUserDungeonsByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken);
+            var existingDungeons =
+                await ListUserDungeonsByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken);
             var oldDungeon = existingDungeons.FirstOrDefault();
             if (oldDungeon is not null)
             {
-                return await UpdateExistingDungeonAsync(optionModel, existingDungeonOption, oldDungeon, cancellationToken);
+                return await UpdateExistingDungeonAsync(optionModel, existingDungeonOption, oldDungeon,
+                    cancellationToken);
             }
 
             optionModel.Id = existingDungeonOption.Id;
@@ -101,7 +108,8 @@ public class DungeonService(IMapper mapper,
         }
     }
 
-    private async Task<DungeonModel> UpdateExistingDungeonAsync(DungeonOptionModel optionModel, DungeonOptionModel existingDungeonOption, DungeonModel oldDungeon, CancellationToken cancellationToken)
+    private async Task<DungeonModel> UpdateExistingDungeonAsync(DungeonOptionModel optionModel,
+        DungeonOptionModel existingDungeonOption, DungeonModel oldDungeon, CancellationToken cancellationToken)
     {
         var dungeonModel = await GenerateDungeonAsync(optionModel, existingDungeonOption.Id);
         dungeonModel.Id = oldDungeon.Id;
@@ -110,20 +118,23 @@ public class DungeonService(IMapper mapper,
         return dungeonModel;
     }
 
-    private async Task<DungeonModel> CreateOptionAndAddDungeonToItAsync(DungeonOptionModel optionModel, CancellationToken cancellationToken)
+    private async Task<DungeonModel> CreateOptionAndAddDungeonToItAsync(DungeonOptionModel optionModel,
+        CancellationToken cancellationToken)
     {
-        await CreateDungeonOptionAsync(optionModel, cancellationToken);
-        var created = await GetDungeonOptionByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken);
-        var dungeonModel = await GenerateDungeonAsync(optionModel, created.Id);
+        var dungeonOptionId = await CreateDungeonOptionAsync(optionModel, cancellationToken);
+        var dungeonModel = await GenerateDungeonAsync(optionModel, dungeonOptionId);
         dungeonModel.Level = 1;
         var id = await AddDungeonAsync(dungeonModel, cancellationToken);
         dungeonModel.Id = id;
         return dungeonModel;
     }
 
-    private async Task<DungeonModel> AddDungeonToExistingOptionAsync(DungeonOptionModel optionModel, int level, CancellationToken cancellationToken)
+    private async Task<DungeonModel> AddDungeonToExistingOptionAsync(DungeonOptionModel optionModel, int level,
+        CancellationToken cancellationToken)
     {
-        var existingDungeons = (await ListUserDungeonsByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken)).ToList();
+        var existingDungeons =
+            (await ListUserDungeonsByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken))
+            .ToList();
         var dungeonModel = await GenerateDungeonAsync(optionModel, optionModel.Id);
         dungeonModel.Level = level;
         if (existingDungeons.Exists(d => d.Level == level))
@@ -135,6 +146,7 @@ public class DungeonService(IMapper mapper,
         {
             dungeonModel.Id = await AddDungeonAsync(dungeonModel, cancellationToken);
         }
+
         return dungeonModel;
     }
 
@@ -166,10 +178,10 @@ public class DungeonService(IMapper mapper,
         try
         {
             var options = await _context.DungeonOptions
-                                            .Include(d => d.Dungeons)
-                                            .AsNoTracking()
-                                            .OrderBy(d => d.Created)
-                                            .ToListAsync(cancellationToken);
+                .Include(d => d.Dungeons)
+                .AsNoTracking()
+                .OrderBy(d => d.Created)
+                .ToListAsync(cancellationToken);
 
             return options.Select(_mapper.Map<DungeonOptionModel>);
         }
@@ -180,16 +192,17 @@ public class DungeonService(IMapper mapper,
         }
     }
 
-    public async Task<IEnumerable<DungeonOptionModel>> GetAllDungeonOptionsForUserAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DungeonOptionModel>> GetAllDungeonOptionsForUserAsync(int userId,
+        CancellationToken cancellationToken)
     {
         try
         {
             var options = await _context.DungeonOptions
-                                            .AsNoTracking()
-                                            .Include(d => d.Dungeons)
-                                            .Where(d => d.UserId == userId)
-                                            .OrderBy(d => d.Created)
-                                            .ToListAsync(cancellationToken);
+                .AsNoTracking()
+                .Include(d => d.Dungeons)
+                .Where(d => d.UserId == userId)
+                .OrderBy(d => d.Created)
+                .ToListAsync(cancellationToken);
 
             return options.Select(_mapper.Map<DungeonOptionModel>);
         }
@@ -200,15 +213,16 @@ public class DungeonService(IMapper mapper,
         }
     }
 
-    public async Task<DungeonOptionModel> GetDungeonOptionByNameAsync(string dungeonName, int userId, CancellationToken cancellationToken)
+    public async Task<DungeonOptionModel?> GetDungeonOptionByNameAsync(string dungeonName, int userId,
+        CancellationToken cancellationToken)
     {
         try
         {
             return _mapper.Map<DungeonOptionModel>(await _context.DungeonOptions
-                                                                    .Include(d => d.Dungeons)
-                                                                    .AsNoTracking()
-                                                                    .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
-                                                                    .FirstOrDefaultAsync(cancellationToken));
+                .Include(d => d.Dungeons)
+                .AsNoTracking()
+                .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
+                .FirstOrDefaultAsync(cancellationToken));
         }
         catch (Exception ex)
         {
@@ -226,7 +240,8 @@ public class DungeonService(IMapper mapper,
 
             if (entity is not null)
             {
-                var dungeons = await _context.Dungeons.Where(sd => sd.DungeonOptionId == entity.Id).ToListAsync(cancellationToken);
+                var dungeons = await _context.Dungeons.Where(sd => sd.DungeonOptionId == entity.Id)
+                    .ToListAsync(cancellationToken);
                 _context.Dungeons.RemoveRange(dungeons);
                 _context.DungeonOptions.Remove(entity);
                 await _context.SaveChangesAsync(cancellationToken);
@@ -285,12 +300,12 @@ public class DungeonService(IMapper mapper,
         try
         {
             var result = await _context.DungeonOptions
-                                        .AsNoTracking()
-                                        .Include(d => d.Dungeons)
-                                        .Where(d => d.UserId == userId)
-                                        .OrderBy(d => d.Created)
-                                        .SelectMany(d => d.Dungeons)
-                                        .ToListAsync(cancellationToken);
+                .AsNoTracking()
+                .Include(d => d.Dungeons)
+                .Where(d => d.UserId == userId)
+                .OrderBy(d => d.Created)
+                .SelectMany(d => d.Dungeons)
+                .ToListAsync(cancellationToken);
             return result.Select(_mapper.Map<DungeonModel>);
         }
         catch (Exception ex)
@@ -300,17 +315,18 @@ public class DungeonService(IMapper mapper,
         }
     }
 
-    public async Task<IEnumerable<DungeonModel>> ListUserDungeonsByNameAsync(string dungeonName, int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DungeonModel>> ListUserDungeonsByNameAsync(string dungeonName, int userId,
+        CancellationToken cancellationToken)
     {
         try
         {
             var result = await _context.DungeonOptions
-                                        .AsNoTracking()
-                                        .Include(d => d.Dungeons)
-                                        .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
-                                        .OrderBy(d => d.Created)
-                                        .SelectMany(d => d.Dungeons)
-                                        .ToListAsync(cancellationToken);
+                .AsNoTracking()
+                .Include(d => d.Dungeons)
+                .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
+                .OrderBy(d => d.Created)
+                .SelectMany(d => d.Dungeons)
+                .ToListAsync(cancellationToken);
             return result.Select(_mapper.Map<DungeonModel>);
         }
         catch (Exception ex)
@@ -325,8 +341,8 @@ public class DungeonService(IMapper mapper,
         try
         {
             return _mapper.Map<DungeonModel>(await _context.Dungeons
-                                                            .AsNoTracking()
-                                                            .FirstOrDefaultAsync(d => d.Id == id, cancellationToken));
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id, cancellationToken));
         }
         catch (Exception ex)
         {
@@ -340,7 +356,7 @@ public class DungeonService(IMapper mapper,
         try
         {
             var entity = await _context.Dungeons
-                                        .FirstOrDefaultAsync(d => d.Id == model.Id, cancellationToken);
+                .FirstOrDefaultAsync(d => d.Id == model.Id, cancellationToken);
             if (entity is not null)
             {
                 _mapper.Map(model, entity);
@@ -358,7 +374,8 @@ public class DungeonService(IMapper mapper,
     {
         try
         {
-            return _mapper.Map<DungeonOptionModel>(await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == id, cancellationToken));
+            return _mapper.Map<DungeonOptionModel>(
+                await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == id, cancellationToken));
         }
         catch (Exception ex)
         {
@@ -371,7 +388,8 @@ public class DungeonService(IMapper mapper,
     {
         try
         {
-            var entity = await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == optionId && d.UserId == userId, cancellationToken);
+            var entity = await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == optionId && d.UserId == userId,
+                cancellationToken);
             if (entity is not null)
             {
                 entity.DungeonName = newName;
@@ -380,7 +398,24 @@ public class DungeonService(IMapper mapper,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Update dungeon failed.");
+            _logger.LogError(ex, "Rename dungeon failed.");
+            throw;
+        }
+    }
+
+    public async Task<string> ExportToJsonAsync(int dungeonId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var dungeon = _mapper.Map<DungeonModel>(await _context.Dungeons
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == dungeonId, cancellationToken));
+
+            return dungeon is not null ? JsonSerializer.Serialize(dungeon) : string.Empty;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "ExportToJson failed.");
             throw;
         }
     }
