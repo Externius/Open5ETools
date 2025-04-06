@@ -9,7 +9,8 @@ using Open5ETools.Core.Common.Models.DM.Services;
 
 namespace Open5ETools.Core.Services.DM;
 
-public class OptionService(IMapper mapper,
+public class OptionService(
+    IMapper mapper,
     IAppDbContext context,
     IMemoryCache memoryCache,
     ILogger<OptionService> logger) : IOptionService
@@ -19,7 +20,8 @@ public class OptionService(IMapper mapper,
     private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
-    public async Task<IEnumerable<OptionModel>> ListOptionsAsync(OptionKey? filter = null, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<OptionModel>> ListOptionsAsync(OptionKey? filter = null,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -27,10 +29,10 @@ public class OptionService(IMapper mapper,
                 return filter.HasValue ? cacheEntry?.Where(o => o.Key == filter.Value) ?? [] : cacheEntry ?? [];
 
             var options = await _context.Options
-                                            .AsNoTracking()
-                                            .ToListAsync(cancellationToken);
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
 
-            cacheEntry = options.Select(_mapper.Map<OptionModel>).ToList();
+            cacheEntry = [.. options.Select(_mapper.Map<OptionModel>)];
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(10));

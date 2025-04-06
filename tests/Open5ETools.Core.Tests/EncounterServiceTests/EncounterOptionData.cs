@@ -59,6 +59,6 @@ public static class EncounterOptionData
             { Difficulty.Easy, 1, 4 },
             { Difficulty.Medium, 2, 3 },
             { Difficulty.Hard, 4, 5 },
-            { Difficulty.Deadly, 7, 3 },
+            { Difficulty.Deadly, 7, 3 }
         };
 }

@@ -12,7 +12,6 @@ using Open5ETools.Core.Common.Models.DM.Services;
 using Open5ETools.Core.Common.Models.Json;
 using Open5ETools.Core.Domain;
 using Open5ETools.Core.Domain.DM;
-using Open5ETools.Core.Helpers;
 using Spell = Open5ETools.Core.Common.Models.Json.Spell;
 
 namespace Open5ETools.Infrastructure.Data;
@@ -47,7 +46,7 @@ public class AppDbContextInitializer(
             await SeedMonstersAsync(cancellationToken);
             await SeedTreasuresAsync(cancellationToken);
             await SeedOptionsAsync(cancellationToken);
-            await SeedDungeonsAsync(cancellationToken, 1);
+            await SeedDungeonsAsync(1, cancellationToken);
             await SeedSpellsAsync(cancellationToken);
         }
     }
@@ -60,8 +59,8 @@ public class AppDbContextInitializer(
             await SeedMonstersAsync(cancellationToken);
             await SeedTreasuresAsync(cancellationToken);
             await SeedOptionsAsync(cancellationToken);
-            await SeedDungeonsAsync(cancellationToken, 1);
-            await SeedDungeonsAsync(cancellationToken, 2);
+            await SeedDungeonsAsync(1, cancellationToken);
+            await SeedDungeonsAsync(2, cancellationToken);
             await SeedSpellsAsync(cancellationToken);
         }
     }
@@ -467,8 +466,7 @@ public class AppDbContextInitializer(
         await _context.SaveChangesAsync(token);
     }
 
-    private async Task SeedDungeonsAsync(CancellationToken token,
-        int userId)
+    private async Task SeedDungeonsAsync(int userId, CancellationToken token)
     {
         var dungeonOption = new DungeonOption
         {
