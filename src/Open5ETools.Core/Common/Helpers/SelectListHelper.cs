@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Open5ETools.Core.Common.Helpers;
+
 public static class SelectListHelper
 {
     public static List<SelectListItem> GetBool()
     {
         return
         [
-            new() { Text = Resources.Common.Yes, Value = "true", Selected = true },
-            new() { Text = Resources.Common.No, Value = "false" }
+            new SelectListItem { Text = Resources.Common.Yes, Value = "true", Selected = true },
+            new SelectListItem { Text = Resources.Common.No, Value = "false" }
         ];
     }
 
@@ -19,6 +20,7 @@ public static class SelectListHelper
         {
             list.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
         }
+
         return list;
     }
 }

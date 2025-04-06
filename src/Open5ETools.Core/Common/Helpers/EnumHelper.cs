@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Open5ETools.Core.Helpers;
+namespace Open5ETools.Core.Common.Helpers;
 
 public static class EnumHelper
 {

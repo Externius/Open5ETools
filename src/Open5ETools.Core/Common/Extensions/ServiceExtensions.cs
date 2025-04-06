@@ -8,7 +8,10 @@ public static class ThreadSafeRandom
 
     public static Random ThisThreadsRandom
     {
-        get { return _local ??= new Random(unchecked(Environment.TickCount * 31 + Environment.CurrentManagedThreadId)); }
+        get
+        {
+            return _local ??= new Random(unchecked(Environment.TickCount * 31 + Environment.CurrentManagedThreadId));
+        }
     }
 }
 
@@ -32,7 +35,7 @@ public static class ServiceExtensions
         }
     }
 
-    public static string GetName(this Enum value, ResourceManager resourceManager, string? defaultValue = null)
+    public static string GetName(this Enum? value, ResourceManager? resourceManager, string? defaultValue = null)
     {
         if (value is null)
             return string.Empty;

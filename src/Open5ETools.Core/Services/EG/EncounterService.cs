@@ -17,7 +17,7 @@ public class EncounterService(
     IMapper mapper,
     IAppDbContext context,
     ILogger<EncounterService> logger
- ) : IEncounterService
+) : IEncounterService
 {
     private readonly IMapper _mapper = mapper;
     private readonly IAppDbContext _context = context;
@@ -34,9 +34,9 @@ public class EncounterService(
 
         return await Task.Run(() =>
             (from object e in Enum.GetValues(typeof(T))
-             select new KeyValuePair<string, int>(((Enum)e)
-                .GetName(Resources.Enum.ResourceManager), (int)e))
-                .ToList());
+                select new KeyValuePair<string, int>(((Enum)e)
+                    .GetName(Resources.Enum.ResourceManager), (int)e))
+            .ToList());
     }
 
     public async Task<EncounterModel> GenerateAsync(EncounterOption option)
@@ -46,10 +46,10 @@ public class EncounterService(
         _partySize = option.PartySize;
         _xpList =
         [
-            new(Difficulty.Easy , Constants.Thresholds[_partyLevel, 0] * _partySize),
-            new(Difficulty.Medium , Constants.Thresholds[_partyLevel, 1] * _partySize),
-            new(Difficulty.Hard , Constants.Thresholds[_partyLevel, 2] * _partySize),
-            new(Difficulty.Deadly , Constants.Thresholds[_partyLevel, 3] * _partySize)
+            new KeyValuePair<Difficulty, int>(Difficulty.Easy, Constants.Thresholds[_partyLevel, 0] * _partySize),
+            new KeyValuePair<Difficulty, int>(Difficulty.Medium, Constants.Thresholds[_partyLevel, 1] * _partySize),
+            new KeyValuePair<Difficulty, int>(Difficulty.Hard, Constants.Thresholds[_partyLevel, 2] * _partySize),
+            new KeyValuePair<Difficulty, int>(Difficulty.Deadly, Constants.Thresholds[_partyLevel, 3] * _partySize)
         ];
         try
         {
@@ -60,13 +60,13 @@ public class EncounterService(
             if (option.MonsterTypes.Any())
             {
                 var selectedMonsters = option.MonsterTypes.Select(m => m.ToString().ToLower());
-                _monsters = _monsters.Where(m => selectedMonsters.Any(m.JsonMonster.Type.ToLower().Equals)).ToList();
+                _monsters = [.. _monsters.Where(m => selectedMonsters.Any(m.JsonMonster.Type.ToLower().Equals))];
             }
 
             if (option.Sizes.Any())
             {
                 var selectedSizes = option.Sizes.Select(s => s.ToString().ToLower());
-                _monsters = _monsters.Where(m => selectedSizes.Any(m.JsonMonster.Size.ToLower().Equals)).ToList();
+                _monsters = [.. _monsters.Where(m => selectedSizes.Any(m.JsonMonster.Size.ToLower().Equals))];
             }
 
             if (option.Difficulty.HasValue)
@@ -74,7 +74,9 @@ public class EncounterService(
 
             foreach (var monster in _monsters)
             {
-                monsterXps.Add(Constants.ChallengeRatingXp[Constants.ChallengeRating.IndexOf(monster.JsonMonster.ChallengeRating)]);
+                monsterXps.Add(
+                    Constants.ChallengeRatingXp[
+                        Constants.ChallengeRating.IndexOf(monster.JsonMonster.ChallengeRating)]);
             }
 
             CheckPossible(sumXp, monsterXps);
@@ -99,7 +101,6 @@ public class EncounterService(
                 }
             });
 
-            result.Monsters.RemoveAll(mm => mm is null); // cleanup if needed
             result.SumXp = result.Monsters.Sum(mm => mm.JsonMonsterModel.Xp);
 
             return result;
@@ -116,7 +117,7 @@ public class EncounterService(
         return Constants.Thresholds[_partyLevel, difficulty] * _partySize;
     }
 
-    private static void ValidateOption(EncounterOption option)
+    private static void ValidateOption(EncounterOption? option)
     {
         var exceptions = new List<ServiceException>();
 
@@ -176,6 +177,7 @@ public class EncounterService(
                         return GetEncounterDetail(difficulties.First(), currentMonster, (int)allXp, count);
                 }
             }
+
             monster++;
         }
 
@@ -188,7 +190,8 @@ public class EncounterService(
         monsterModel.JsonMonsterModel.Xp = allXp;
         monsterModel.JsonMonsterModel.Count = count;
         monsterModel.JsonMonsterModel.Difficulty = difficulty.GetName(Resources.Enum.ResourceManager);
-        monsterModel.JsonMonsterModel.Size = Enum.Parse<Size>(currentMonster.JsonMonster.Size).GetName(Resources.Enum.ResourceManager);
+        monsterModel.JsonMonsterModel.Size =
+            Enum.Parse<Size>(currentMonster.JsonMonster.Size).GetName(Resources.Enum.ResourceManager);
 
         if (Enum.TryParse(monsterModel.JsonMonsterModel.Type, out MonsterType type))
             monsterModel.JsonMonsterModel.Type = type.GetName(Resources.Enum.ResourceManager);
@@ -199,8 +202,8 @@ public class EncounterService(
     public async Task<MonsterModel> GetMonsterByIdAsync(int id)
     {
         var monster = await _context.Monsters
-                                .AsNoTracking()
-                                .FirstOrDefaultAsync(m => m.Id == id);
+            .AsNoTracking()
+            .FirstOrDefaultAsync(m => m.Id == id);
 
         return _mapper.Map<MonsterModel>(monster);
     }

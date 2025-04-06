@@ -23,7 +23,7 @@ public static class ConfigureServices
                 var supportedCultures = new List<CultureInfo>
                 {
                     new("hu"),
-                    new("en"),
+                    new("en")
                 };
                 opts.DefaultRequestCulture = new RequestCulture("en");
                 opts.SupportedCultures = supportedCultures;

@@ -229,7 +229,6 @@ public static class Constants
         "28",
         "29",
         "30"
-,
     ];
 
     public static readonly int[,] Thresholds = {
