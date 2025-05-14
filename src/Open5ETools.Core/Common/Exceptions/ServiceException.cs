@@ -17,7 +17,6 @@ public class ServiceException : Exception
         Args = args;
     }
 
-
     public ServiceException(string message, string field, params object[] args) : base(message)
     {
         Field = field;

@@ -10,11 +10,11 @@ public enum MonsterType
     Elemental = 6,
     Fey = 7,
     Fiend = 8,
-    Giant = 8,
-    Humanoid = 9,
-    Monstrosity = 10,
-    Ooze = 11,
-    Plant = 12,
-    SwarmOfTinyBeasts = 13,
-    Undead = 14
+    Giant = 9,
+    Humanoid = 10,
+    Monstrosity = 11,
+    Ooze = 12,
+    Plant = 13,
+    SwarmOfTinyBeasts = 14,
+    Undead = 15
 }
