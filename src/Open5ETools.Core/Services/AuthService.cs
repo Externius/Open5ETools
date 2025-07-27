@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Helpers;
@@ -19,9 +19,9 @@ public class AuthService(IMapper mapper, IAppDbContext context, ILogger<AuthServ
         try
         {
             var user = await _context.Users
-                                        .AsNoTracking()
-                                        .Where(u => u.IsDeleted == false)
-                                        .FirstOrDefaultAsync(u => u.Username == model.Username, cancellationToken);
+                .AsNoTracking()
+                .Where(u => u.IsDeleted == false)
+                .FirstOrDefaultAsync(u => u.Username == model.Username, cancellationToken);
 
             if (user is null)
                 return null;

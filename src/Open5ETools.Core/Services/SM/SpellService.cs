@@ -1,9 +1,11 @@
-using AutoMapper;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Common.Interfaces.Services.SM;
 using Open5ETools.Core.Common.Models.SM;
+using Open5ETools.Resources;
 
 namespace Open5ETools.Core.Services.SM;
 
@@ -11,7 +13,7 @@ public class SpellService(
     IMapper mapper,
     IAppDbContext context,
     ILogger<SpellService> logger
-    ) : ISpellService
+) : ISpellService
 {
     private readonly IMapper _mapper = mapper;
     private readonly IAppDbContext _context = context;
@@ -22,8 +24,9 @@ public class SpellService(
         try
         {
             var spell = await _context.Spells
-                                        .AsNoTracking()
-                                        .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken) ??
+                        throw new ServiceException(Error.NotFound);
 
             return _mapper.Map<SpellModel>(spell);
         }
@@ -34,7 +37,8 @@ public class SpellService(
         }
     }
 
-    public async Task<IEnumerable<SpellModel>> ListAsync(string? search = null, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<SpellModel>> ListAsync(string? search = null,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -42,11 +46,11 @@ public class SpellService(
 
             if (!string.IsNullOrWhiteSpace(search))
                 query = query.Where(s => EF.Functions.Like(s.Name, $"%{search}%")
-                            || EF.Functions.Like(s.Class, $"%{search}%")
-                            || EF.Functions.Like(s.Level, $"%{search}%")
-                            || EF.Functions.Like(s.CastingTime, $"%{search}%")
-                            || EF.Functions.Like(s.Range, $"%{search}%")
-                            || EF.Functions.Like(s.Components, $"%{search}%")
+                                         || EF.Functions.Like(s.Class, $"%{search}%")
+                                         || EF.Functions.Like(s.Level, $"%{search}%")
+                                         || EF.Functions.Like(s.CastingTime, $"%{search}%")
+                                         || EF.Functions.Like(s.Range, $"%{search}%")
+                                         || EF.Functions.Like(s.Components, $"%{search}%")
                 );
 
             var items = await query.ToListAsync(cancellationToken);
