@@ -14,9 +14,7 @@ public class Get(TestFixture fixture) : IClassFixture<TestFixture>
     [InlineData(256)]
     public async Task GetAsync_WithValidId_ReturnsSpell(int id)
     {
-        using var source = new CancellationTokenSource();
-        var token = source.Token;
-        var result = await _spellService.GetAsync(id, token);
+        var result = await _spellService.GetAsync(id, TestContext.Current.CancellationToken);
         result.ShouldNotBeNull();
         result.Id.ShouldBe(id);
     }

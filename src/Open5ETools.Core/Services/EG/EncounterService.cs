@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common;
@@ -10,6 +10,8 @@ using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Models.EG;
 using Open5ETools.Core.Domain.EG;
+using Open5ETools.Resources;
+using Enum = System.Enum;
 
 namespace Open5ETools.Core.Services.EG;
 
@@ -202,8 +204,9 @@ public class EncounterService(
     public async Task<MonsterModel> GetMonsterByIdAsync(int id)
     {
         var monster = await _context.Monsters
-            .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.Id == id);
+                          .AsNoTracking()
+                          .FirstOrDefaultAsync(m => m.Id == id) ??
+                      throw new ServiceException(Error.NotFound);
 
         return _mapper.Map<MonsterModel>(monster);
     }

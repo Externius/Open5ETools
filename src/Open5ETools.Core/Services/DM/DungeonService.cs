@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using AutoMapper;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Exceptions;
@@ -218,11 +218,12 @@ public class DungeonService(
     {
         try
         {
-            return _mapper.Map<DungeonOptionModel>(await _context.DungeonOptions
+            var dungeonOption = await _context.DungeonOptions
                 .Include(d => d.Dungeons)
                 .AsNoTracking()
                 .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
-                .FirstOrDefaultAsync(cancellationToken));
+                .FirstOrDefaultAsync(cancellationToken);
+            return dungeonOption is not null ? _mapper.Map<DungeonOptionModel>(dungeonOption) : null;
         }
         catch (Exception ex)
         {
@@ -341,8 +342,9 @@ public class DungeonService(
         try
         {
             return _mapper.Map<DungeonModel>(await _context.Dungeons
-                .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Id == id, cancellationToken));
+                                                 .AsNoTracking()
+                                                 .FirstOrDefaultAsync(d => d.Id == id, cancellationToken) ??
+                                             throw new ServiceException(Error.NotFound));
         }
         catch (Exception ex)
         {
@@ -375,7 +377,8 @@ public class DungeonService(
         try
         {
             return _mapper.Map<DungeonOptionModel>(
-                await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == id, cancellationToken));
+                await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == id, cancellationToken) ??
+                throw new ServiceException(Error.NotFound));
         }
         catch (Exception ex)
         {
@@ -408,10 +411,12 @@ public class DungeonService(
         try
         {
             var dungeon = _mapper.Map<DungeonModel>(await _context.Dungeons
-                .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Id == dungeonId, cancellationToken));
+                                                        .AsNoTracking()
+                                                        .FirstOrDefaultAsync(d => d.Id == dungeonId,
+                                                            cancellationToken) ??
+                                                    throw new ServiceException(Error.NotFound));
 
-            return dungeon is not null ? JsonSerializer.Serialize(dungeon) : string.Empty;
+            return JsonSerializer.Serialize(dungeon);
         }
         catch (Exception ex)
         {
