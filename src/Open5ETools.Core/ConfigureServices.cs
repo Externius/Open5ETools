@@ -19,49 +19,49 @@ namespace Open5ETools.Core;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddApplicationServices(
-        this IServiceCollection services
-    )
+    extension(IServiceCollection services)
     {
-        services
-            .AddScoped<IUserService, UserService>()
-            .AddScoped<IAuthService, AuthService>()
-            .AddScoped<IEncounterService, EncounterService>()
-            .AddScoped<IDungeonHelper, DungeonHelper>()
-            .AddScoped<IOptionService, OptionService>()
-            .AddScoped<IDungeon, Dungeon>()
-            .AddScoped<IDungeonNoCorridor, DungeonNoCorridor>()
-            .AddScoped<IDungeonService, DungeonService>()
-            .AddScoped<ISpellService, SpellService>();
+        public IServiceCollection AddApplicationServices()
+        {
+            services
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IEncounterService, EncounterService>()
+                .AddScoped<IDungeonHelper, DungeonHelper>()
+                .AddScoped<IOptionService, OptionService>()
+                .AddScoped<IDungeon, Dungeon>()
+                .AddScoped<IDungeonNoCorridor, DungeonNoCorridor>()
+                .AddScoped<IDungeonService, DungeonService>()
+                .AddScoped<ISpellService, SpellService>();
 
-        services.ConfigureMapster();
-        return services;
-    }
+            services.ConfigureMapster();
+            return services;
+        }
 
+        private IServiceCollection ConfigureMapster()
+        {
+            services.AddMapster();
+            TypeAdapterConfig<Spell, Open5ETools.Core.Domain.SM.Spell>
+                .NewConfig()
+                .Map(dest => dest.Concentration,
+                    src => string.IsNullOrWhiteSpace(src.Concentration) ||
+                           !src.Concentration.Equals("no", StringComparison.InvariantCultureIgnoreCase))
+                .Map(dest => dest.Ritual,
+                    src => string.IsNullOrWhiteSpace(src.Ritual) ||
+                           !src.Ritual.Equals("no", StringComparison.InvariantCultureIgnoreCase))
+                .Map(dest => dest.School,
+                    src => Enum.Parse<School>(src.School ?? string.Empty));
 
-    private static IServiceCollection ConfigureMapster(this IServiceCollection services)
-    {
-        services.AddMapster();
-        TypeAdapterConfig<Spell, Open5ETools.Core.Domain.SM.Spell>
-            .NewConfig()
-            .Map(dest => dest.Concentration,
-                src => string.IsNullOrWhiteSpace(src.Concentration) ||
-                       !src.Concentration.Equals("no", StringComparison.InvariantCultureIgnoreCase))
-            .Map(dest => dest.Ritual,
-                src => string.IsNullOrWhiteSpace(src.Ritual) ||
-                       !src.Ritual.Equals("no", StringComparison.InvariantCultureIgnoreCase))
-            .Map(dest => dest.School,
-                src => Enum.Parse<School>(src.School ?? string.Empty));
+            TypeAdapterConfig<Monster, JsonMonsterModel>
+                .NewConfig()
+                .Map(dest => dest.Hp, src => src.HitPoints)
+                .Map(dest => dest.Ac, src => src.ArmorClass);
 
-        TypeAdapterConfig<Monster, JsonMonsterModel>
-            .NewConfig()
-            .Map(dest => dest.Hp, src => src.HitPoints)
-            .Map(dest => dest.Ac, src => src.ArmorClass);
+            TypeAdapterConfig<Open5ETools.Core.Domain.EG.Monster, MonsterModel>
+                .NewConfig()
+                .Map(dest => dest.JsonMonsterModel, src => src.JsonMonster);
 
-        TypeAdapterConfig<Open5ETools.Core.Domain.EG.Monster, MonsterModel>
-            .NewConfig()
-            .Map(dest => dest.JsonMonsterModel, src => src.JsonMonster);
-
-        return services;
+            return services;
+        }
     }
 }

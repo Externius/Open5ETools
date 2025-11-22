@@ -14,7 +14,7 @@ public class AuthService(IMapper mapper, IAppDbContext context, ILogger<AuthServ
     private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
-    public async Task<UserModel?> LoginAsync(UserModel model, CancellationToken cancellationToken)
+    public async Task<UserModel?> LoginAsync(UserModel model, CancellationToken cancellationToken = default)
     {
         try
         {

@@ -25,6 +25,10 @@ public class AppDbContextInitializer(
     private readonly IMapper _mapper = mapper;
     private readonly IAppDbContext _context = context;
     private readonly IDungeonService _dungeonService = dungeonService;
+    public const int TestAdminUserId = 1;
+    public const int TestUserId = 2;
+    public const int TestDeletedUserId = 3;
+    public const int TestNotExistingUserId = 999;
 
     public async Task UpdateAsync(CancellationToken cancellationToken)
     {
@@ -568,6 +572,7 @@ public class AppDbContextInitializer(
     {
         _context.Users.Add(new User
         {
+            Id = TestAdminUserId,
             Username = "TestAdmin",
             Password = PasswordHelper.EncryptPassword(config.Value.DefaultAdminPassword),
             FirstName = "Test",
@@ -578,6 +583,7 @@ public class AppDbContextInitializer(
 
         _context.Users.Add(new User
         {
+            Id = TestUserId,
             Username = "TestUser",
             Password = PasswordHelper.EncryptPassword(config.Value.DefaultUserPassword),
             FirstName = "Test",
@@ -585,6 +591,19 @@ public class AppDbContextInitializer(
             Email = "user@user.com",
             Role = Role.User
         });
+
+        _context.Users.Add(new User
+        {
+            Id = TestDeletedUserId,
+            Username = "UT Deleted User",
+            Password = PasswordHelper.EncryptPassword(config.Value.DefaultUserPassword),
+            FirstName = "Test",
+            LastName = "User",
+            Email = "user@user.com",
+            Role = Role.User,
+            IsDeleted = true
+        });
+
         await _context.SaveChangesAsync(token);
     }
 }

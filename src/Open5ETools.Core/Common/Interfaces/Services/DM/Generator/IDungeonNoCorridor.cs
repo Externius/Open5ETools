@@ -5,8 +5,8 @@ namespace Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 public interface IDungeonNoCorridor
 {
     DungeonTile[][] DungeonTiles { get; set; }
-    ICollection<RoomDescription> RoomDescription { get; set; }
-    IList<DungeonTile> OpenDoorList { get; set; }
+    List<RoomDescription> RoomDescription { get; set; }
+    List<DungeonTile> OpenDoorList { get; set; }
     DungeonModel Generate(DungeonOptionModel model);
     void AddEntryPoint();
     void Init(DungeonOptionModel optionModel);

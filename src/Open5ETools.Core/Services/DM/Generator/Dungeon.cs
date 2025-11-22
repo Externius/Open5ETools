@@ -13,9 +13,9 @@ public class Dungeon(IDungeonHelper dungeonHelper) : IDungeon
     private const int Movement = 10;
     internal readonly List<DungeonTile> Rooms = [];
     internal List<DungeonTile> Doors = [];
-    public ICollection<RoomDescription> RoomDescription { get; set; } = [];
-    private ICollection<TrapDescription> TrapDescription { get; set; } = [];
-    private ICollection<RoamingMonsterDescription> RoamingMonsterDescription { get; set; } = [];
+    public List<RoomDescription> RoomDescription { get; set; } = [];
+    private List<TrapDescription> TrapDescription { get; set; } = [];
+    private List<RoamingMonsterDescription> RoamingMonsterDescription { get; set; } = [];
     public DungeonTile[][] DungeonTiles { get; set; } = [];
     private List<DungeonTile> _result = [];
     private List<DungeonTile> _corridors = [];

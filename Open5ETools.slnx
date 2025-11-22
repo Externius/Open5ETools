@@ -1,4 +1,15 @@
 <Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Docker/">
+    <File Path="Docker/configure-db.sh" />
+    <File Path="Docker/Dockerfile" />
+    <File Path="Docker/entrypoint.sh" />
+    <File Path="Docker/setup.sql" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path=".github/workflows/main.yml" />

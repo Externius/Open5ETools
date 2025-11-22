@@ -19,7 +19,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
     private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
-    public async Task<int> CreateAsync(UserModel model, CancellationToken cancellationToken)
+    public async Task<int> CreateAsync(UserModel model, CancellationToken cancellationToken = default)
     {
         ValidateModel(model);
         await CheckUserExistAsync(model, cancellationToken);
@@ -45,20 +45,20 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         if (model.Password.Length < 8)
             errors.Add(new ServiceException(Error.PasswordLength));
         if (string.IsNullOrEmpty(model.Username))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.Username)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.Username))));
         if (string.IsNullOrEmpty(model.FirstName))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.FirstName)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.FirstName))));
         if (string.IsNullOrEmpty(model.LastName))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.LastName)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.LastName))));
         if (string.IsNullOrEmpty(model.Email))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.Email)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.Email))));
         if (string.IsNullOrEmpty(model.Role))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.Role)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.Role))));
         if (errors.Count != 0)
             throw new ServiceAggregateException(errors);
     }
 
-    private async Task CheckUserExistAsync(UserModel model, CancellationToken cancellationToken)
+    private async Task CheckUserExistAsync(UserModel model, CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
             .AsNoTracking()
@@ -67,11 +67,11 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
             throw new ServiceException(string.Format(Error.UserExist, model.Username));
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
 
             if (user is not null)
             {
@@ -90,7 +90,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         }
     }
 
-    public async Task<UserModel> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<UserModel> GetAsync(int id, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -108,8 +108,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         }
     }
 
-    public async Task<IEnumerable<UserModel>> ListAsync(bool? deleted = false,
-        CancellationToken cancellationToken = default)
+    public async Task<UserModel[]> ListAsync(bool? deleted = false, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -132,18 +131,19 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         }
     }
 
-    public async Task<bool> RestoreAsync(int id, CancellationToken cancellationToken)
+    public async Task<bool> RestoreAsync(int id, CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id && u.IsDeleted, cancellationToken);
             if (user is not null)
             {
                 user.IsDeleted = false;
                 await _context.SaveChangesAsync(cancellationToken);
+                return true;
             }
 
-            return true;
+            return false;
         }
         catch (Exception ex)
         {
@@ -152,7 +152,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         }
     }
 
-    public async Task UpdateAsync(UserModel model, CancellationToken cancellationToken)
+    public async Task UpdateAsync(UserModel model, CancellationToken cancellationToken = default)
     {
         ValidateModelForEdit(model);
         try
@@ -163,7 +163,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.Email = model.Email;
-                user.Role = (Role)Enum.Parse(typeof(Role), model.Role);
+                user.Role = Enum.Parse<Role>(model.Role);
                 await _context.SaveChangesAsync(cancellationToken);
             }
         }
@@ -179,18 +179,18 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         var errors = new List<ServiceException>();
         ArgumentNullException.ThrowIfNull(model);
         if (string.IsNullOrEmpty(model.FirstName))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.FirstName)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.FirstName))));
         if (string.IsNullOrEmpty(model.LastName))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.LastName)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.LastName))));
         if (string.IsNullOrEmpty(model.Email))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.Email)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.Email))));
         if (string.IsNullOrEmpty(model.Role))
-            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, model.Role)));
+            errors.Add(new ServiceException(string.Format(Error.RequiredValidation, nameof(model.Role))));
         if (errors.Count != 0)
             throw new ServiceAggregateException(errors);
     }
 
-    public async Task ChangePasswordAsync(ChangePasswordModel model, CancellationToken cancellationToken)
+    public async Task ChangePasswordAsync(ChangePasswordModel model, CancellationToken cancellationToken = default)
     {
         try
         {

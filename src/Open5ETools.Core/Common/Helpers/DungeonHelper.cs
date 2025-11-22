@@ -15,7 +15,7 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
     private readonly IAppDbContext _context = context;
 
     // encounter
-    private IList<Models.Json.Monster> _filteredMonsters = [];
+    private List<Models.Json.Monster> _filteredMonsters = [];
     private int _sumXp;
 
     private readonly int[] _difficulty =
@@ -31,20 +31,19 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
 
     // door
     private DungeonTile[][] DungeonTiles { get; set; } = [];
-    private ICollection<DungeonTile> DoorList { get; set; } = [];
+    private List<DungeonTile> DoorList { get; set; } = [];
     private int _westCount;
     private int _southCount;
     private int _eastCount;
     private int _northCount;
 
-    private IList<TreasureDescription> TreasureList { get; set; } = [];
-    private IList<Models.Json.Monster> _monsterList = [];
+    private List<TreasureDescription> TreasureList { get; set; } = [];
 
-    private IList<Models.Json.Monster> MonsterList
+    private List<Models.Json.Monster> MonsterList
     {
-        get => _monsterList;
-        set => _monsterList = GetMonsters(value); // get monsters for party level
-    }
+        get;
+        set => field = GetMonsters(value); // get monsters for party level
+    } = [];
 
     private int PartyLevel { get; set; }
     private int PartySize { get; set; }
@@ -85,7 +84,7 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
     }
 
     public void AddRoomDescription(DungeonTile[][] dungeonTiles, int x, int y,
-        ICollection<RoomDescription> roomDescription, ICollection<DungeonTile> currentDoors)
+        List<RoomDescription> roomDescription, List<DungeonTile> currentDoors)
     {
         dungeonTiles[x][y].Index = roomDescription.Count;
         DungeonTiles = dungeonTiles;
@@ -98,7 +97,7 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
         dungeonTiles[x][y].Description = Convert.ToString(roomDescription.Count);
     }
 
-    public void AddTrapDescription(DungeonTile dungeonTile, ICollection<TrapDescription> trapDescription)
+    public void AddTrapDescription(DungeonTile dungeonTile, List<TrapDescription> trapDescription)
     {
         dungeonTile.Index = trapDescription.Count;
         trapDescription.Add(new TrapDescription(
@@ -108,7 +107,7 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
     }
 
     public void AddRoamingMonsterDescription(DungeonTile dungeonTile,
-        ICollection<RoamingMonsterDescription> roamingMonsterDescription)
+        List<RoamingMonsterDescription> roamingMonsterDescription)
     {
         dungeonTile.Index = roamingMonsterDescription.Count;
         roamingMonsterDescription.Add(new RoamingMonsterDescription(
@@ -127,7 +126,7 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
         return "#ROOM" + x + "#";
     }
 
-    public void AddNcRoomDescription(DungeonTile dungeonTile, ICollection<RoomDescription> roomDescription,
+    public void AddNcRoomDescription(DungeonTile dungeonTile, List<RoomDescription> roomDescription,
         string doors)
     {
         dungeonTile.Index = roomDescription.Count;
@@ -480,7 +479,7 @@ public class DungeonHelper(IAppDbContext context) : IDungeonHelper
             or Texture.NoCorridorDoorTrapped;
     }
 
-    public string GetNcDoorDescription(DungeonTile[][] dungeonTiles, IEnumerable<DungeonTile> closedList)
+    public string GetNcDoorDescription(DungeonTile[][] dungeonTiles, List<DungeonTile> closedList)
     {
         _westCount = 1;
         _southCount = 1;

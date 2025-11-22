@@ -5,5 +5,5 @@ namespace Open5ETools.Core.Common.Interfaces.Services.DM;
 
 public interface IOptionService
 {
-    Task<IEnumerable<OptionModel>> ListOptionsAsync(OptionKey? filter = null, CancellationToken cancellationToken = default);
+    Task<OptionModel[]> ListOptionsAsync(OptionKey? filter = null, CancellationToken cancellationToken = default);
 }
