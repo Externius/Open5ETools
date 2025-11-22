@@ -1,4 +1,7 @@
-﻿using Open5ETools.Core.Common.Interfaces.Data;
+﻿using Microsoft.Extensions.Options;
+using Open5ETools.Core.Common.Configurations;
+using Open5ETools.Core.Common.Interfaces.Data;
+using Open5ETools.Core.Common.Interfaces.Services;
 using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Interfaces.Services.EG;
@@ -14,6 +17,8 @@ public class TestFixture : IDisposable
     public readonly IDungeonNoCorridor DungeonNoCorridor;
     public readonly IEncounterService EncounterService;
     public readonly ISpellService SpellService;
+    public readonly IUserService UserService;
+    public readonly IOptions<AppConfigOptions> Config;
     private readonly TestEnvironment _env = new();
     private bool _disposedValue;
 
@@ -23,7 +28,9 @@ public class TestFixture : IDisposable
         OptionService = _env.GetService<IOptionService>();
         EncounterService = _env.GetService<IEncounterService>();
         SpellService = _env.GetService<ISpellService>();
+        UserService = _env.GetService<IUserService>();
         Context = _env.GetService<IAppDbContext>();
+        Config = _env.GetService<IOptions<AppConfigOptions>>();
         DungeonNoCorridor = _env.GetNcDungeon();
     }
 

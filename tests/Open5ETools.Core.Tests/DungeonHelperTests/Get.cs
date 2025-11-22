@@ -54,7 +54,7 @@ public class Get
     {
         _dungeonNoCorridor.AddFirstRoom();
         var list = _dungeonNoCorridor.DungeonTiles.SelectMany(T => T);
-        var match = list.Where(x => x.Texture == Texture.Room);
+        var match = list.Where(x => x.Texture == Texture.Room).ToList();
         var result = _dungeonHelper.GetNcDoorDescription(_dungeonNoCorridor.DungeonTiles, match);
         result.ShouldNotBeNull();
     }

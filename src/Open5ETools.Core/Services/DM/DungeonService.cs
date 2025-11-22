@@ -173,7 +173,7 @@ public class DungeonService(
         }
     }
 
-    public async Task<IEnumerable<DungeonOptionModel>> GetAllDungeonOptionsAsync(CancellationToken cancellationToken)
+    public async Task<DungeonOptionModel[]> GetAllDungeonOptionsAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -181,9 +181,9 @@ public class DungeonService(
                 .Include(d => d.Dungeons)
                 .AsNoTracking()
                 .OrderBy(d => d.Created)
-                .ToListAsync(cancellationToken);
+                .ToArrayAsync(cancellationToken);
 
-            return options.Select(_mapper.Map<DungeonOptionModel>);
+            return [.. options.Select(_mapper.Map<DungeonOptionModel>)];
         }
         catch (Exception ex)
         {
@@ -192,7 +192,7 @@ public class DungeonService(
         }
     }
 
-    public async Task<IEnumerable<DungeonOptionModel>> GetAllDungeonOptionsForUserAsync(int userId,
+    public async Task<DungeonOptionModel[]> GetAllDungeonOptionsForUserAsync(int userId,
         CancellationToken cancellationToken)
     {
         try
@@ -202,9 +202,9 @@ public class DungeonService(
                 .Include(d => d.Dungeons)
                 .Where(d => d.UserId == userId)
                 .OrderBy(d => d.Created)
-                .ToListAsync(cancellationToken);
+                .ToArrayAsync(cancellationToken);
 
-            return options.Select(_mapper.Map<DungeonOptionModel>);
+            return [.. options.Select(_mapper.Map<DungeonOptionModel>)];
         }
         catch (Exception ex)
         {
@@ -296,7 +296,7 @@ public class DungeonService(
         }
     }
 
-    public async Task<IEnumerable<DungeonModel>> ListUserDungeonsAsync(int userId, CancellationToken cancellationToken)
+    public async Task<DungeonModel[]> ListUserDungeonsAsync(int userId, CancellationToken cancellationToken)
     {
         try
         {
@@ -306,8 +306,8 @@ public class DungeonService(
                 .Where(d => d.UserId == userId)
                 .OrderBy(d => d.Created)
                 .SelectMany(d => d.Dungeons)
-                .ToListAsync(cancellationToken);
-            return result.Select(_mapper.Map<DungeonModel>);
+                .ToArrayAsync(cancellationToken);
+            return [.. result.Select(_mapper.Map<DungeonModel>)];
         }
         catch (Exception ex)
         {
@@ -316,7 +316,7 @@ public class DungeonService(
         }
     }
 
-    public async Task<IEnumerable<DungeonModel>> ListUserDungeonsByNameAsync(string dungeonName, int userId,
+    public async Task<DungeonModel[]> ListUserDungeonsByNameAsync(string dungeonName, int userId,
         CancellationToken cancellationToken)
     {
         try
@@ -327,8 +327,8 @@ public class DungeonService(
                 .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
                 .OrderBy(d => d.Created)
                 .SelectMany(d => d.Dungeons)
-                .ToListAsync(cancellationToken);
-            return result.Select(_mapper.Map<DungeonModel>);
+                .ToArrayAsync(cancellationToken);
+            return [.. result.Select(_mapper.Map<DungeonModel>)];
         }
         catch (Exception ex)
         {

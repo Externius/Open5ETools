@@ -24,8 +24,12 @@ public static class ControllerExtensions
                 controller.ModelState.AddModelError(e.Field, e.Message);
                 break;
             default:
-                logger.LogError(ex, "{GetDisplayUrl}: {DefaultError}", controller.Request.GetDisplayUrl(),
-                    defaultError ?? ServiceException.GeneralError);
+                if (logger.IsEnabled(LogLevel.Error))
+                {
+                    logger.LogError(ex, "{GetDisplayUrl}: {DefaultError}", controller.Request.GetDisplayUrl(),
+                        defaultError ?? ServiceException.GeneralError);
+                }
+
                 controller.ModelState.AddModelError(string.Empty, defaultError ?? ServiceException.GeneralError);
                 break;
         }

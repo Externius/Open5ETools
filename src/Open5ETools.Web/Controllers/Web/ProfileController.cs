@@ -52,6 +52,7 @@ public class ProfileController(
             }
         }
 
+        ViewData["ReturnUrl"] = Url.Action(nameof(Index));
         return View(model);
     }
 }

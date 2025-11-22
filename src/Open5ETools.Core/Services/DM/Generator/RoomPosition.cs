@@ -5,10 +5,11 @@ namespace Open5ETools.Core.Services.DM.Generator;
 
 public static class RoomPosition
 {
-    public static bool Up { get; set; }
-    public static bool Down { get; set; }
-    public static bool Left { get; set; }
-    public static bool Right { get; set; }
+    public static bool Up { get; private set; }
+    public static bool Down { get; private set; }
+    public static bool Left { get; private set; }
+    public static bool Right { get; private set; }
+
     internal static void CheckRoomPosition(DungeonTile[][] dungeonTiles, int x, int y)
     {
         Up = false;
