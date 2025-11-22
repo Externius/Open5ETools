@@ -2,6 +2,7 @@
 
 public class ServiceException : Exception
 {
+    public const string GeneralError = "GeneralError";
     public const string GeneralAggregateError = "GeneralAggregateError";
     public const string EntityNotFoundException = "EntityNotFoundException";
     public const string RequiredValidation = "RequiredValidation";
@@ -9,11 +10,11 @@ public class ServiceException : Exception
 
     public object[]? Args { get; }
 
-    public string? Field { get; }
+    public string Field { get; }
 
     public ServiceException(string message, params object[] args) : base(message)
     {
-        Field = null;
+        Field = string.Empty;
         Args = args;
     }
 
@@ -26,7 +27,7 @@ public class ServiceException : Exception
     public ServiceException(string message, Exception innerException, params object[] args) : base(message,
         innerException)
     {
-        Field = null;
+        Field = string.Empty;
         Args = args;
     }
 

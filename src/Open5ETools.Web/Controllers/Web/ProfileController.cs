@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Open5ETools.Core.Common.Interfaces.Services;
 using Open5ETools.Core.Common.Models.Services;
+using Open5ETools.Web.Extensions;
 using Open5ETools.Web.Models.Profile;
 
 namespace Open5ETools.Web.Controllers.Web;
 
 [Authorize]
-public class ProfileController(IUserService userService,
+public class ProfileController(
+    IUserService userService,
     ICurrentUserService currentUserService,
     IMapper mapper,
     ILogger<ProfileController> logger) : Controller
@@ -34,7 +36,8 @@ public class ProfileController(IUserService userService,
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ChangePassword(ProfileChangePasswordModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> ChangePassword(ProfileChangePasswordModel model,
+        CancellationToken cancellationToken)
     {
         if (ModelState.IsValid)
         {
@@ -45,10 +48,10 @@ public class ProfileController(IUserService userService,
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error changing password.");
-                ModelState.AddModelError("", ex.Message);
+                this.HandleException(ex, _logger, "Error changing password.");
             }
         }
+
         return View(model);
     }
 }

@@ -11,6 +11,7 @@ using Open5ETools.Web.Models.Dungeon;
 using System.Text.Json;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Resources;
+using Open5ETools.Web.Extensions;
 
 namespace Open5ETools.Web.Controllers.Web;
 
@@ -70,7 +71,7 @@ public class DungeonController(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting dungeon.");
+            this.HandleException(ex, _logger, "Error deleting dungeon.");
         }
 
         return RedirectToAction(nameof(Index));
@@ -109,7 +110,7 @@ public class DungeonController(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error renaming dungeon.");
+            this.HandleException(ex, _logger, "Error renaming dungeon.");
         }
 
         return View(model);
@@ -125,7 +126,7 @@ public class DungeonController(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting dungeon option.");
+            this.HandleException(ex, _logger, "Error deleting dungeon option.");
         }
 
         return RedirectToAction(nameof(Index));
@@ -168,7 +169,7 @@ public class DungeonController(
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating dungeon.");
+                this.HandleException(ex, _logger, "Error creating dungeon.");
             }
         }
 
