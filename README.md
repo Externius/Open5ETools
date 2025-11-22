@@ -8,7 +8,7 @@ This repo is for playing around with DnD5E SRD materials, trying out some techno
 
 ## Prerequisites
 
-You have .NET 9 SDK installed.
+You have .NET 10 SDK installed.
 
 ## Get the code
 
