@@ -111,7 +111,7 @@ public class DungeonService(
     private async Task<DungeonModel> UpdateExistingDungeonAsync(DungeonOptionModel optionModel,
         DungeonOptionModel existingDungeonOption, DungeonModel oldDungeon, CancellationToken cancellationToken)
     {
-        var dungeonModel = await GenerateDungeonAsync(optionModel, existingDungeonOption.Id);
+        var dungeonModel = await GenerateDungeonAsync(optionModel, existingDungeonOption.Id, cancellationToken);
         dungeonModel.Id = oldDungeon.Id;
         dungeonModel.Level = oldDungeon.Level;
         await UpdateDungeonAsync(dungeonModel, cancellationToken);
@@ -122,7 +122,7 @@ public class DungeonService(
         CancellationToken cancellationToken)
     {
         var dungeonOptionId = await CreateDungeonOptionAsync(optionModel, cancellationToken);
-        var dungeonModel = await GenerateDungeonAsync(optionModel, dungeonOptionId);
+        var dungeonModel = await GenerateDungeonAsync(optionModel, dungeonOptionId, cancellationToken);
         dungeonModel.Level = 1;
         var id = await AddDungeonAsync(dungeonModel, cancellationToken);
         dungeonModel.Id = id;
@@ -135,7 +135,7 @@ public class DungeonService(
         var existingDungeons =
             (await ListUserDungeonsByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken))
             .ToList();
-        var dungeonModel = await GenerateDungeonAsync(optionModel, optionModel.Id);
+        var dungeonModel = await GenerateDungeonAsync(optionModel, optionModel.Id, cancellationToken);
         dungeonModel.Level = level;
         if (existingDungeons.Exists(d => d.Level == level))
         {
@@ -150,21 +150,23 @@ public class DungeonService(
         return dungeonModel;
     }
 
-    private async Task<DungeonModel> GenerateDungeonAsync(DungeonOptionModel optionModel, int optionId)
+    private async Task<DungeonModel> GenerateDungeonAsync(DungeonOptionModel optionModel, int optionId,
+        CancellationToken cancellationToken)
     {
-        var dungeonModel = await GenerateDungeonAsync(optionModel);
+        var dungeonModel = await GenerateDungeonAsync(optionModel, cancellationToken);
         dungeonModel.DungeonOptionId = optionId;
         return dungeonModel;
     }
 
-    public async Task<DungeonModel> GenerateDungeonAsync(DungeonOptionModel model)
+    public async Task<DungeonModel> GenerateDungeonAsync(DungeonOptionModel model, CancellationToken cancellationToken)
     {
         try
         {
             ValidateModel(model);
             if (model.Corridor)
-                return await Task.FromResult(_dungeon.Generate(model));
-            return await Task.FromResult(_dungeonNcDungeon.Generate(model));
+                return await Task.Run(async () => await Task.FromResult(_dungeon.Generate(model)), cancellationToken);
+            return await Task.Run(async () => await Task.FromResult(_dungeonNcDungeon.Generate(model)),
+                cancellationToken);
         }
         catch (Exception ex)
         {

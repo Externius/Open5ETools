@@ -32,7 +32,8 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
             Corridor = false,
             UserId = 1
         };
-        var result = await _dungeonService.CreateDungeonOptionAsync(optionsModel, TestContext.Current.CancellationToken);
+        var result =
+            await _dungeonService.CreateDungeonOptionAsync(optionsModel, TestContext.Current.CancellationToken);
         result.ShouldBeGreaterThan(0);
     }
 
@@ -41,7 +42,7 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
     {
         var optionsModel =
             (await _dungeonService.GetAllDungeonOptionsForUserAsync(1, TestContext.Current.CancellationToken)).First();
-        var dungeon = await _dungeonService.GenerateDungeonAsync(optionsModel);
+        var dungeon = await _dungeonService.GenerateDungeonAsync(optionsModel, TestContext.Current.CancellationToken);
 
         var result = await _dungeonService.AddDungeonAsync(dungeon, TestContext.Current.CancellationToken);
         result.ShouldBeGreaterThan(1);
@@ -63,7 +64,8 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
 
         var act = async () =>
         {
-            await _dungeonService.CreateOrUpdateDungeonAsync(optionsModel, false, 1, TestContext.Current.CancellationToken);
+            await _dungeonService.CreateOrUpdateDungeonAsync(optionsModel, false, 1,
+                TestContext.Current.CancellationToken);
         };
 
         var result = await act.ShouldThrowAsync<ServiceAggregateException>();
@@ -97,7 +99,8 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
             UserId = 1
         };
         var result =
-            await _dungeonService.CreateOrUpdateDungeonAsync(optionsModel, false, 1, TestContext.Current.CancellationToken);
+            await _dungeonService.CreateOrUpdateDungeonAsync(optionsModel, false, 1,
+                TestContext.Current.CancellationToken);
         result.ShouldNotBeNull();
         result.RoamingMonsterDescription.ShouldBe(Constants.Empty);
     }
@@ -109,7 +112,8 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
         const int userId = 1;
         const int levelNumber = 2;
         var existingDungeonOption =
-            (await _dungeonService.GetAllDungeonOptionsForUserAsync(userId, TestContext.Current.CancellationToken)).First();
+            (await _dungeonService.GetAllDungeonOptionsForUserAsync(userId, TestContext.Current.CancellationToken))
+            .First();
         var currentDungeonCount =
             (await _dungeonService.ListUserDungeonsByNameAsync(existingDungeonOption.DungeonName, userId,
                 TestContext.Current.CancellationToken)).Count();
