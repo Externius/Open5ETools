@@ -2,5 +2,5 @@
 
 public class UserListViewModel
 {
-    public IEnumerable<UserEditViewModel> Details { get; set; } = [];
+    public UserEditViewModel[] Details { get; init; } = [];
 }

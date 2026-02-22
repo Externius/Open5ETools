@@ -6,11 +6,6 @@ using Open5ETools.Infrastructure.Data;
 using Open5ETools.Web.Services;
 using Serilog;
 using System.Globalization;
-using Mapster;
-using Open5ETools.Core.Common.Models.DM.Services;
-using Open5ETools.Core.Common.Models.EG;
-using Open5ETools.Web.Models.Dungeon;
-using Open5ETools.Web.Models.Encounter;
 
 namespace Open5ETools.Web;
 
@@ -51,8 +46,7 @@ public static class ConfigureServices
                 options.AccessDeniedPath = new PathString("/Auth/Forbidden/");
             });
 
-        services.ConfigureMapster()
-            .AddMemoryCache();
+        services.AddMemoryCache();
 
         services.AddMvc()
 #if DEBUG
@@ -67,33 +61,6 @@ public static class ConfigureServices
         services.AddHealthChecks();
 
         return services;
-    }
-
-    private static IServiceCollection ConfigureMapster(this IServiceCollection services)
-    {
-        services.AddMapster();
-
-        TypeAdapterConfig<EncounterOptionViewModel, EncounterOption>
-            .NewConfig()
-            .Map(dest => dest.Sizes, src => src.SelectedSizes)
-            .Map(dest => dest.MonsterTypes, src => src.SelectedMonsterTypes);
-
-        TypeAdapterConfig<DungeonOptionCreateViewModel, DungeonOptionModel>
-            .NewConfig()
-            .Map(dest => dest.TreasureValue, src => Convert.ToDouble(src.TreasureValue, CultureInfo.InvariantCulture))
-            .Ignore(dest => dest.MonsterType);
-
-        TypeAdapterConfig<DungeonOptionModel, DungeonOptionCreateViewModel>
-            .NewConfig()
-            .Map(dest => dest.TreasureValue, src => src.TreasureValue.ToString(CultureInfo.InvariantCulture))
-            .Map(dest => dest.MonsterType, src => GetMonsters(src));
-
-        return services;
-    }
-
-    private static string[] GetMonsters(DungeonOptionModel model)
-    {
-        return model.MonsterType.Split(',');
     }
 
     public static IHostBuilder AddSerilog(this IHostBuilder host,

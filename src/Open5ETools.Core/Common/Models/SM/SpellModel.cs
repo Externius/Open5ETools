@@ -3,43 +3,30 @@ using Open5ETools.Core.Common.Models.Services;
 
 namespace Open5ETools.Core.Common.Models.SM;
 
-public class SpellModel: EditModel
-{
-    public string Name { get; set; } = string.Empty;
-
-    public string Desc { get; set; } = string.Empty;
-
-    public string? HigherLevel { get; set; }
-
-    public string Page { get; set; } = string.Empty;
-
-    public string Range { get; set; } = string.Empty;
-
-    public string Components { get; set; } = string.Empty;
-
-    public string? Material { get; set; }
-
-    public bool Ritual { get; set; }
-
-    public string? Duration { get; set; }
-
-    public bool Concentration { get; set; }
-
-    public string CastingTime { get; set; } = string.Empty;
-
-    public string Level { get; set; } = string.Empty;
-
-    public School School { get; set; }
-
-    public string Class { get; set; } = string.Empty;
-
-    public string? Archetype { get; set; }
-
-    public string? Circles { get; set; }
-
-    public string? Domains { get; set; }
-
-    public string? Oaths { get; set; }
-
-    public string? Patrons { get; set; }
-}
+public record SpellModel(
+    string Name,
+    string Desc,
+    string? HigherLevel,
+    string Page,
+    string Range,
+    string Components,
+    string? Material,
+    bool Ritual,
+    string? Duration,
+    bool Concentration,
+    string CastingTime,
+    string Level,
+    School School,
+    string Class,
+    string? Archetype,
+    string? Circles,
+    string? Domains,
+    string? Oaths,
+    string? Patrons,
+    int Id,
+    byte[] Timestamp,
+    string CreatedBy,
+    DateTime Created,
+    string LastModifiedBy,
+    DateTime LastModified
+) : EditModel(Id, Timestamp, CreatedBy, Created, LastModifiedBy, LastModified);

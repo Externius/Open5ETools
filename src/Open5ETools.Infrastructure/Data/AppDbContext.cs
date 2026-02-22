@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Domain;
@@ -10,6 +11,8 @@ namespace Open5ETools.Infrastructure.Data;
 
 public class AppDbContext : DbContext, IAppDbContext
 {
+    protected readonly JsonSerializerOptions JsonSerializerOptions = new();
+
     public const string DbProvider = "DbProvider";
     public const string Open5ETools = "Open5ETools";
     public const string SqliteContext = "sqlite";
@@ -22,16 +25,19 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Monster> Monsters { get; set; }
     public DbSet<Treasure> Treasures { get; set; }
     public DbSet<Spell> Spells { get; set; }
+
     public AppDbContext()
     {
-
     }
+
     protected AppDbContext(DbContextOptions options) : base(options)
     {
     }
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DungeonOption>()
@@ -42,21 +48,18 @@ public class AppDbContext : DbContext, IAppDbContext
             .HasIndex(o => new { o.Key, o.Name })
             .IsUnique();
 
-        modelBuilder.Entity<Monster>().OwnsOne(
-                monster => monster.JsonMonster, ownedNavigationBuilder =>
-                {
-                    ownedNavigationBuilder.ToJson();
-                    ownedNavigationBuilder.OwnsMany(m => m.SpecialAbilities);
-                    ownedNavigationBuilder.OwnsMany(m => m.Actions);
-                    ownedNavigationBuilder.OwnsMany(m => m.LegendaryActions);
-                    ownedNavigationBuilder.OwnsMany(m => m.Reactions);
-                });
+        modelBuilder.Entity<Monster>(entity =>
+        {
+            entity.Property(e => e.JsonMonster)
+                .HasColumnType("nvarchar(max)")
+                .HasConversion(
+                    monster => JsonSerializer.Serialize(monster, JsonSerializerOptions),
+                    s => JsonSerializer.Deserialize<Open5ETools.Core.Common.Models.Json.Monster>(s,
+                        JsonSerializerOptions)!);
+        });
 
         modelBuilder.Entity<Treasure>().OwnsOne(
-                treasure => treasure.TreasureDescription, ownedNavigationBuilder =>
-                {
-                    ownedNavigationBuilder.ToJson();
-                });
+            treasure => treasure.TreasureDescription, ownedNavigationBuilder => { ownedNavigationBuilder.ToJson(); });
         modelBuilder.UseEnumStringConverter();
     }
 }

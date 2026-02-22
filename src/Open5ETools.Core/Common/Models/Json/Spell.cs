@@ -1,62 +1,35 @@
 using System.Text.Json.Serialization;
 
 namespace Open5ETools.Core.Common.Models.Json;
-public class Spell
-{
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("desc")]
-    public string Desc { get; set; } = string.Empty;
-
-    [JsonPropertyName("higher_level")]
-    public string? HigherLevel { get; set; }
-
-    [JsonPropertyName("page")]
-    public string Page { get; set; } = string.Empty;
-
-    [JsonPropertyName("range")]
-    public string? Range { get; set; }
-
-    [JsonPropertyName("components")]
-    public string? Components { get; set; }
-
-    [JsonPropertyName("material")]
-    public string? Material { get; set; }
-
-    [JsonPropertyName("ritual")]
-    public string? Ritual { get; set; }
-
-    [JsonPropertyName("duration")]
-    public string? Duration { get; set; }
-
-    [JsonPropertyName("concentration")]
-    public string? Concentration { get; set; }
-
-    [JsonPropertyName("casting_time")]
-    public string? CastingTime { get; set; }
-
-    [JsonPropertyName("level")]
-    public string Level { get; set; } = string.Empty;
-
-    [JsonPropertyName("school")]
-    public string? School { get; set; }
-
-    [JsonPropertyName("class")]
-    public string? Class { get; set; }
-
-    [JsonPropertyName("archetype")]
-    public string? Archetype { get; set; }
-
-    [JsonPropertyName("circles")]
-    public string? Circles { get; set; }
-
-    [JsonPropertyName("domains")]
-    public string? Domains { get; set; }
-
-    [JsonPropertyName("oaths")]
-    public string? Oaths { get; set; }
-
-    [JsonPropertyName("patrons")]
-    public string? Patrons { get; set; }
-}
+public record Spell(
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("desc")] string Desc,
+    [property: JsonPropertyName("higher_level")]
+    string? HigherLevel,
+    [property: JsonPropertyName("page")] string Page,
+    [property: JsonPropertyName("range")] string? Range,
+    [property: JsonPropertyName("components")]
+    string? Components,
+    [property: JsonPropertyName("material")]
+    string? Material,
+    [property: JsonPropertyName("ritual")] string? Ritual,
+    [property: JsonPropertyName("duration")]
+    string? Duration,
+    [property: JsonPropertyName("concentration")]
+    string? Concentration,
+    [property: JsonPropertyName("casting_time")]
+    string? CastingTime,
+    [property: JsonPropertyName("level")] string Level,
+    [property: JsonPropertyName("school")] string? School,
+    [property: JsonPropertyName("class")] string? Class,
+    [property: JsonPropertyName("archetype")]
+    string? Archetype,
+    [property: JsonPropertyName("circles")]
+    string? Circles,
+    [property: JsonPropertyName("domains")]
+    string? Domains,
+    [property: JsonPropertyName("oaths")] string? Oaths,
+    [property: JsonPropertyName("patrons")]
+    string? Patrons
+);

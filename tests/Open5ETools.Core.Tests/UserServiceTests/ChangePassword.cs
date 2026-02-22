@@ -19,11 +19,11 @@ public class ChangePassword(TestFixture fixture) : IClassFixture<TestFixture>
     public async Task ChangePasswordAsync_WithValidInput_ChangesPassword()
     {
         var model = new ChangePasswordModel
-        {
-            Id = AppDbContextInitializer.TestUserId,
-            CurrentPassword = _config.Value.DefaultUserPassword,
-            NewPassword = Password
-        };
+        (
+            AppDbContextInitializer.TestUserId,
+            _config.Value.DefaultUserPassword,
+            Password
+        );
         var oldUserModel = await _userService.GetAsync(model.Id, TestContext.Current.CancellationToken);
         var act = async () => { await _userService.ChangePasswordAsync(model, TestContext.Current.CancellationToken); };
 
@@ -37,20 +37,23 @@ public class ChangePassword(TestFixture fixture) : IClassFixture<TestFixture>
         return
         [
             (new ChangePasswordModel
-            {
-                NewPassword = "length"
-            }, Error.PasswordLength),
+            (
+                AppDbContextInitializer.TestUserId,
+                Password,
+                "length"
+            ), Error.PasswordLength),
             (new ChangePasswordModel
-            {
-                NewPassword = Password,
-                Id = AppDbContextInitializer.TestNotExistingUserId,
-            }, Error.NotFound),
+            (
+                AppDbContextInitializer.TestNotExistingUserId,
+                string.Empty,
+                Password
+            ), Error.NotFound),
             (new ChangePasswordModel
-            {
-                NewPassword = Password,
-                Id = AppDbContextInitializer.TestUserId,
-                CurrentPassword = "wrong"
-            }, Error.PasswordMissMatch)
+            (
+                AppDbContextInitializer.TestUserId,
+                "wrong",
+                Password
+            ), Error.PasswordMissMatch)
         ];
     }
 

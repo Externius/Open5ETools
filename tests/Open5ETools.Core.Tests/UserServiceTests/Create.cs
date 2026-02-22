@@ -16,14 +16,21 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
     public async Task CreateAsync_WithValidModel_CreatesUser()
     {
         var model = new UserModel
-        {
-            Username = "ddd",
-            Password = "asdasdada+mnn!",
-            Email = "dasd@test.com",
-            FirstName = "John",
-            LastName = "Doe",
-            Role = nameof(Role.Admin)
-        };
+        (
+            "ddd",
+            "John",
+            "Doe",
+            "dasd@test.com",
+            "asdasdada+mnn!",
+            false,
+            nameof(Role.Admin),
+            0,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        );
         var result = await _userService.CreateAsync(model, cancellationToken: TestContext.Current.CancellationToken);
         result.ShouldBeGreaterThan(AppDbContextInitializer.TestDeletedUserId);
     }
@@ -31,7 +38,22 @@ public class Create(TestFixture fixture) : IClassFixture<TestFixture>
     [Fact]
     public async Task CreateAsync_WithInValidModel_ThrowsServiceAggregateException()
     {
-        var model = new UserModel();
+        var model = new UserModel
+        (
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            false,
+            string.Empty,
+            0,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        );
         var expectedErrors = new List<string>
         {
             string.Format(Error.RequiredValidation, nameof(model.Username)),

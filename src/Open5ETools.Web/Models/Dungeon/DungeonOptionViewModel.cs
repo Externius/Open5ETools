@@ -6,32 +6,20 @@ public class DungeonOptionViewModel : EditViewModel
 {
     [Required]
     [StringLength(50, MinimumLength = 3)]
-    public string DungeonName { get; set; } = string.Empty;
-    [Required]
-    public int DungeonSize { get; set; }
-    [Required]
-    public int DungeonDifficulty { get; set; }
-    [Required]
-    public int PartyLevel { get; set; }
-    [Required]
-    public int PartySize { get; set; }
-    [Required]
-    public double TreasureValue { get; set; }
-    [Required]
-    public int ItemsRarity { get; set; }
-    [Required]
-    public int RoomDensity { get; set; }
-    [Required]
-    public int RoomSize { get; set; }
-    [Required]
-    public string MonsterType { get; set; } = string.Empty;
-    [Required]
-    public int TrapPercent { get; set; }
-    [Required]
-    public bool DeadEnd { get; set; }
-    [Required]
-    public bool Corridor { get; set; }
-    [Required]
-    public int RoamingPercent { get; set; }
-    public IEnumerable<DungeonViewModel> Dungeons { get; set; } = [];
+    public required string DungeonName { get; set; }
+
+    [Required] public required int DungeonSize { get; set; }
+    [Required] public required int DungeonDifficulty { get; set; }
+    [Required] public required int PartyLevel { get; set; }
+    [Required] public required int PartySize { get; set; }
+    [Required] public required double TreasureValue { get; set; }
+    [Required] public required int ItemsRarity { get; set; }
+    [Required] public required int RoomDensity { get; set; }
+    [Required] public required int RoomSize { get; set; }
+    [Required] public required string MonsterType { get; set; }
+    [Required] public required int TrapPercent { get; set; }
+    [Required] public required bool DeadEnd { get; set; }
+    [Required] public required bool Corridor { get; set; }
+    [Required] public required int RoamingPercent { get; set; }
+    public required DungeonViewModel[] Dungeons { get; set; }
 }

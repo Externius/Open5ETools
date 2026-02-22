@@ -17,12 +17,12 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    JsonMonster = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JsonMonster = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,8 +36,8 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Key = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(32767)", maxLength: 32767, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
                     Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
@@ -51,25 +51,25 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HigherLevel = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Page = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Range = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Components = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Material = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Ritual = table.Column<bool>(type: "bit", nullable: false),
-                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Concentration = table.Column<bool>(type: "bit", nullable: false),
-                    CastingTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Desc = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Page = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Range = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Components = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    CastingTime = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Class = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
                     School = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Class = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Archetype = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Circles = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Domains = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Oaths = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Patrons = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ritual = table.Column<bool>(type: "bit", nullable: false),
+                    Concentration = table.Column<bool>(type: "bit", nullable: false),
+                    HigherLevel = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Material = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Duration = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Archetype = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Circles = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Domains = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Oaths = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Patrons = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
                     Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -105,11 +105,11 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
@@ -129,7 +129,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DungeonName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DungeonName = table.Column<string>(type: "nvarchar(32767)", maxLength: 32767, nullable: false),
                     DungeonSize = table.Column<int>(type: "int", nullable: false),
                     DungeonDifficulty = table.Column<int>(type: "int", nullable: false),
                     PartyLevel = table.Column<int>(type: "int", nullable: false),
@@ -138,7 +138,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                     ItemsRarity = table.Column<int>(type: "int", nullable: false),
                     RoomDensity = table.Column<int>(type: "int", nullable: false),
                     RoomSize = table.Column<int>(type: "int", nullable: false),
-                    MonsterType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MonsterType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TrapPercent = table.Column<int>(type: "int", nullable: false),
                     DeadEnd = table.Column<bool>(type: "bit", nullable: false),
                     Corridor = table.Column<bool>(type: "bit", nullable: false),
@@ -167,10 +167,10 @@ namespace Open5ETools.Infrastructure.Migrations.SqlServerMigrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DungeonTiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrapDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoamingMonsterDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DungeonTiles = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
+                    RoomDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    TrapDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: false),
+                    RoamingMonsterDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
                     Level = table.Column<int>(type: "int", nullable: false),
                     DungeonOptionId = table.Column<int>(type: "int", nullable: false),
                     Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),

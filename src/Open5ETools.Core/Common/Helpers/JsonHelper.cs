@@ -13,10 +13,10 @@ public static class JsonHelper
         PropertyNameCaseInsensitive = true
     };
 
-    public static IList<T> DeserializeJson<T>(string fileName)
+    public static List<T> DeserializeJson<T>(string fileName)
     {
         var json = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/Data/" + fileName) ??
                    throw new FileNotFoundException(fileName);
-        return JsonSerializer.Deserialize<IList<T>>(json, Options) ?? [];
+        return JsonSerializer.Deserialize<List<T>>(json, Options) ?? [];
     }
 }

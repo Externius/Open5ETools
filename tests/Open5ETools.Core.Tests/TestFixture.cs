@@ -6,6 +6,8 @@ using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
 using Open5ETools.Core.Common.Interfaces.Services.EG;
 using Open5ETools.Core.Common.Interfaces.Services.SM;
+using Open5ETools.Core.Common.Models.DM.Services;
+using Open5ETools.Infrastructure.Data;
 
 namespace Open5ETools.Core.Tests;
 
@@ -21,6 +23,32 @@ public class TestFixture : IDisposable
     public readonly IOptions<AppConfigOptions> Config;
     private readonly TestEnvironment _env = new();
     private bool _disposedValue;
+
+    public readonly DungeonOptionModel TestDungeonOptionModel = new
+    (
+        "UT Dungeon 1",
+        AppDbContextInitializer.TestAdminUserId,
+        25,
+        1,
+        4,
+        4,
+        1,
+        1,
+        10,
+        20,
+        "any",
+        20,
+        true,
+        false,
+        0,
+        [],
+        1,
+        [],
+        string.Empty,
+        DateTime.UtcNow,
+        string.Empty,
+        DateTime.UtcNow
+    );
 
     public TestFixture()
     {

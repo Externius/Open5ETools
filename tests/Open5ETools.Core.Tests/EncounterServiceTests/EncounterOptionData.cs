@@ -8,49 +8,53 @@ public static class EncounterOptionData
     public static TheoryData<EncounterOption> Data =>
     [
         new EncounterOption
-        {
-            PartyLevel = 4,
-            PartySize = 3,
-            MonsterTypes = [MonsterType.Aberration],
-            Sizes = [Size.Small, Size.Medium],
-            Count = 1
-        },
+        (
+            4,
+            3,
+            null,
+            [MonsterType.Aberration],
+            [Size.Small, Size.Medium],
+            1
+        ),
         new EncounterOption
-        {
-            PartyLevel = 3,
-            PartySize = 4,
-            MonsterTypes = [MonsterType.Ooze, MonsterType.Fey],
-            Sizes = [Size.Tiny, Size.Small, Size.Medium],
-            Count = 6
-        },
+        (
+            3,
+            4,
+            null,
+            [MonsterType.Ooze, MonsterType.Fey],
+            [Size.Tiny, Size.Small, Size.Medium],
+            6
+        ),
         new EncounterOption
-        {
-            PartyLevel = 4,
-            PartySize = 5,
-            MonsterTypes = [MonsterType.Elemental, MonsterType.Giant, MonsterType.Fiend],
-            Sizes = [Size.Small, Size.Medium, Size.Large],
-            Count = 3
-        },
+        (
+            4,
+            5,
+            null,
+            [MonsterType.Elemental, MonsterType.Giant, MonsterType.Fiend],
+            [Size.Small, Size.Medium, Size.Large],
+            3
+        ),
         new EncounterOption
-        {
-            PartyLevel = 8,
-            PartySize = 4,
-            MonsterTypes = [MonsterType.Beast, MonsterType.Humanoid, MonsterType.Celestial, MonsterType.Dragon],
-            Sizes = [Size.Medium, Size.Large, Size.Huge],
-            Count = 5
-        },
+        (
+            8,
+            4,
+            null,
+            [MonsterType.Beast, MonsterType.Humanoid, MonsterType.Celestial, MonsterType.Dragon],
+            [Size.Medium, Size.Large, Size.Huge],
+            5
+        ),
         new EncounterOption
-        {
-            PartyLevel = 12,
-            PartySize = 3,
-            MonsterTypes =
+        (
+            12,
+            3,
+            null,
             [
                 MonsterType.SwarmOfTinyBeasts, MonsterType.Undead, MonsterType.Construct,
                 MonsterType.Plant, MonsterType.Monstrosity
             ],
-            Sizes = [Size.Medium, Size.Large, Size.Huge, Size.Gargantuan],
-            Count = 2
-        }
+            [Size.Medium, Size.Large, Size.Huge, Size.Gargantuan],
+            2
+        )
     ];
 
     public static TheoryData<Difficulty, int, int> FilterWithDifficultyData =>

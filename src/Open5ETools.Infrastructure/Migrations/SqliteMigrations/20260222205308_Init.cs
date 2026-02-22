@@ -17,12 +17,12 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    JsonMonster = table.Column<string>(type: "TEXT", nullable: false),
                     Timestamp = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    JsonMonster = table.Column<string>(type: "TEXT", nullable: false)
+                    LastModified = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,8 +36,8 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Key = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Value = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
                     Timestamp = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
@@ -51,25 +51,25 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Desc = table.Column<string>(type: "TEXT", nullable: false),
-                    HigherLevel = table.Column<string>(type: "TEXT", nullable: true),
-                    Page = table.Column<string>(type: "TEXT", nullable: false),
-                    Range = table.Column<string>(type: "TEXT", nullable: false),
-                    Components = table.Column<string>(type: "TEXT", nullable: false),
-                    Material = table.Column<string>(type: "TEXT", nullable: true),
-                    Ritual = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Duration = table.Column<string>(type: "TEXT", nullable: true),
-                    Concentration = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CastingTime = table.Column<string>(type: "TEXT", nullable: false),
-                    Level = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Desc = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Page = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Range = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Components = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    CastingTime = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Level = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Class = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
                     School = table.Column<int>(type: "INTEGER", nullable: false),
-                    Class = table.Column<string>(type: "TEXT", nullable: false),
-                    Archetype = table.Column<string>(type: "TEXT", nullable: true),
-                    Circles = table.Column<string>(type: "TEXT", nullable: true),
-                    Domains = table.Column<string>(type: "TEXT", nullable: true),
-                    Oaths = table.Column<string>(type: "TEXT", nullable: true),
-                    Patrons = table.Column<string>(type: "TEXT", nullable: true),
+                    Ritual = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Concentration = table.Column<bool>(type: "INTEGER", nullable: false),
+                    HigherLevel = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Material = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Duration = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Archetype = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Circles = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Domains = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Oaths = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
+                    Patrons = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
                     Timestamp = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -105,11 +105,11 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    Username = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Timestamp = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -129,7 +129,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DungeonName = table.Column<string>(type: "TEXT", nullable: false),
+                    DungeonName = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
                     DungeonSize = table.Column<int>(type: "INTEGER", nullable: false),
                     DungeonDifficulty = table.Column<int>(type: "INTEGER", nullable: false),
                     PartyLevel = table.Column<int>(type: "INTEGER", nullable: false),
@@ -138,7 +138,7 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                     ItemsRarity = table.Column<int>(type: "INTEGER", nullable: false),
                     RoomDensity = table.Column<int>(type: "INTEGER", nullable: false),
                     RoomSize = table.Column<int>(type: "INTEGER", nullable: false),
-                    MonsterType = table.Column<string>(type: "TEXT", nullable: false),
+                    MonsterType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     TrapPercent = table.Column<int>(type: "INTEGER", nullable: false),
                     DeadEnd = table.Column<bool>(type: "INTEGER", nullable: false),
                     Corridor = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -167,10 +167,10 @@ namespace Open5ETools.Infrastructure.Migrations.SqliteMigrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DungeonTiles = table.Column<string>(type: "TEXT", nullable: false),
-                    RoomDescription = table.Column<string>(type: "TEXT", nullable: false),
-                    TrapDescription = table.Column<string>(type: "TEXT", nullable: false),
-                    RoamingMonsterDescription = table.Column<string>(type: "TEXT", nullable: true),
+                    DungeonTiles = table.Column<string>(type: "TEXT", maxLength: 2147483647, nullable: false),
+                    RoomDescription = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    TrapDescription = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: false),
+                    RoamingMonsterDescription = table.Column<string>(type: "TEXT", maxLength: 32767, nullable: true),
                     Level = table.Column<int>(type: "INTEGER", nullable: false),
                     DungeonOptionId = table.Column<int>(type: "INTEGER", nullable: false),
                     Timestamp = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),

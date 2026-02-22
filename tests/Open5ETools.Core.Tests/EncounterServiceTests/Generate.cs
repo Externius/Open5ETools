@@ -17,7 +17,7 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
     {
         var result = await _encounterService.GenerateAsync(option);
         result.ShouldNotBeNull();
-        result.Monsters.Count.ShouldBe(option.Count);
+        result.Monsters.Length.ShouldBe(option.Count);
     }
 
     [Theory]
@@ -40,29 +40,30 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
     public async Task CanFilterWithDifficulty(Difficulty difficulty, int partyLevel, int partySize)
     {
         var option = new EncounterOption
-        {
-            PartyLevel = partyLevel,
-            MonsterTypes = [MonsterType.Beast, MonsterType.Humanoid, MonsterType.SwarmOfTinyBeasts],
-            PartySize = partySize,
-            Difficulty = difficulty
-        };
+        (
+            partyLevel,
+            partySize,
+            difficulty,
+            [MonsterType.Beast, MonsterType.Humanoid, MonsterType.SwarmOfTinyBeasts],
+            []
+        );
         var encounterModel = await _encounterService.GenerateAsync(option);
         encounterModel.ShouldNotBeNull();
         encounterModel.Monsters.ShouldNotBeNull();
-        encounterModel.Monsters.TrueForAll(e => e.JsonMonsterModel.Difficulty.Equals(difficulty.ToString()))
-            .ShouldBeTrue();
+        encounterModel.Monsters.ShouldAllBe(m => m.JsonMonsterModel.Difficulty.Equals(difficulty.ToString()));
     }
 
     [Fact]
     public async Task CanThrowException()
     {
         var option = new EncounterOption
-        {
-            PartyLevel = 1,
-            PartySize = 1,
-            MonsterTypes = [MonsterType.Dragon],
-            Difficulty = Difficulty.Easy
-        };
+        (
+            1,
+            1,
+            Difficulty.Easy,
+            [MonsterType.Dragon],
+            []
+        );
         await Should.ThrowAsync<ServiceException>(async () => { await _encounterService.GenerateAsync(option); });
     }
 }

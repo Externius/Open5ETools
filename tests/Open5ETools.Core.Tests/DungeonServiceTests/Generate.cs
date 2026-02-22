@@ -1,5 +1,6 @@
 ﻿using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Models.DM.Services;
+using Open5ETools.Infrastructure.Data;
 using Shouldly;
 
 namespace Open5ETools.Core.Tests.DungeonServiceTests;
@@ -12,24 +13,30 @@ public class Generate(TestFixture fixture) : IClassFixture<TestFixture>
     public async Task GenerateDungeonAsync_WithValidOptionModel_ReturnsDungeonModel()
     {
         var result = await _dungeonService.GenerateDungeonAsync(new DungeonOptionModel
-        {
-            DungeonName = "UT Dungeon",
-            Created = DateTime.UtcNow,
-            ItemsRarity = 1,
-            DeadEnd = true,
-            DungeonDifficulty = 1,
-            DungeonSize = 25,
-            MonsterType = "any",
-            PartyLevel = 4,
-            PartySize = 4,
-            TrapPercent = 20,
-            RoamingPercent = 0,
-            TreasureValue = 1,
-            RoomDensity = 10,
-            RoomSize = 20,
-            Corridor = false,
-            UserId = 1
-        }, TestContext.Current.CancellationToken);
+        (
+            "UT Dungeon",
+            AppDbContextInitializer.TestAdminUserId,
+            25,
+            1,
+            4,
+            4,
+            1,
+            1,
+            10,
+            20,
+            "any",
+            20,
+            true,
+            false,
+            0,
+            [],
+            1,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        ), TestContext.Current.CancellationToken);
 
         result.DungeonTiles.ShouldNotBeNull();
     }

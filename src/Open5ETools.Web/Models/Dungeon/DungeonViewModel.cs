@@ -5,11 +5,11 @@ namespace Open5ETools.Web.Models.Dungeon;
 public class DungeonViewModel : EditViewModel
 {
     [Required]
-    public string DungeonTiles { get; set; } = string.Empty;
+    public required string DungeonTiles { get; init; }
     [Required]
-    public string RoomDescription { get; set; } = string.Empty;
-    public string TrapDescription { get; set; } = string.Empty;
-    public string RoamingMonsterDescription { get; set; } = string.Empty;
+    public required string RoomDescription { get; init; }
+    public required string TrapDescription { get; init; }
+    public required string RoamingMonsterDescription { get; init; } 
     public int DungeonOptionId { get; set; }
-    public int Level { get; set; }
+    public int Level { get; init; }
 }

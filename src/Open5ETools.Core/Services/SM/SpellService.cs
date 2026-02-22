@@ -1,21 +1,19 @@
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Common.Interfaces.Services.SM;
+using Open5ETools.Core.Common.Mappers;
 using Open5ETools.Core.Common.Models.SM;
 using Open5ETools.Resources;
 
 namespace Open5ETools.Core.Services.SM;
 
 public class SpellService(
-    IMapper mapper,
     IAppDbContext context,
     ILogger<SpellService> logger
 ) : ISpellService
 {
-    private readonly IMapper _mapper = mapper;
     private readonly IAppDbContext _context = context;
     private readonly ILogger _logger = logger;
 
@@ -28,7 +26,7 @@ public class SpellService(
                             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken) ??
                         throw new ServiceException(Error.NotFound);
 
-            return _mapper.Map<SpellModel>(spell);
+            return spell.ToModel();
         }
         catch (Exception ex)
         {
@@ -37,8 +35,7 @@ public class SpellService(
         }
     }
 
-    public async Task<IEnumerable<SpellModel>> ListAsync(string? search = null,
-        CancellationToken cancellationToken = default)
+    public async Task<SpellModel[]> ListAsync(string? search = null, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -53,8 +50,8 @@ public class SpellService(
                                          || EF.Functions.Like(s.Components, $"%{search}%")
                 );
 
-            var items = await query.ToListAsync(cancellationToken);
-            return items.Select(_mapper.Map<SpellModel>);
+            var items = await query.ToArrayAsync(cancellationToken);
+            return [.. items.Select(s => s.ToModel())];
         }
         catch (Exception ex)
         {
