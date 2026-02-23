@@ -1,5 +1,4 @@
-﻿using MapsterMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Open5ETools.Core.Common.Configurations;
 using Open5ETools.Core.Common.Enums;
@@ -7,8 +6,8 @@ using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Helpers;
 using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Common.Interfaces.Services.DM;
+using Open5ETools.Core.Common.Mappers;
 using Open5ETools.Core.Common.Models.DM.Generator;
-using Open5ETools.Core.Common.Models.DM.Services;
 using Open5ETools.Core.Common.Models.Json;
 using Open5ETools.Core.Domain;
 using Open5ETools.Core.Domain.DM;
@@ -17,12 +16,10 @@ using Spell = Open5ETools.Core.Common.Models.Json.Spell;
 namespace Open5ETools.Infrastructure.Data;
 
 public class AppDbContextInitializer(
-    IMapper mapper,
     IAppDbContext context,
     IDungeonService dungeonService,
     IOptions<AppConfigOptions> config)
 {
-    private readonly IMapper _mapper = mapper;
     private readonly IAppDbContext _context = context;
     private readonly IDungeonService _dungeonService = dungeonService;
     public const int TestAdminUserId = 1;
@@ -72,7 +69,7 @@ public class AppDbContextInitializer(
     private async Task SeedSpellsAsync(CancellationToken cancellationToken)
     {
         var spells = JsonHelper.DeserializeJson<Spell>(JsonHelper.SpellFileName);
-        var spellEntities = spells.Select(spell => _mapper.Map<Core.Domain.SM.Spell>(spell)).ToList();
+        var spellEntities = spells.Select(spell => spell.ToEntity());
 
         await _context.Spells.AddRangeAsync(spellEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -81,7 +78,14 @@ public class AppDbContextInitializer(
     private async Task SeedTreasuresAsync(CancellationToken cancellationToken)
     {
         var treasures = JsonHelper.DeserializeJson<TreasureDescription>(JsonHelper.TreasureFileName);
-        var treasureEntities = treasures.Select(treasure => new Treasure { TreasureDescription = treasure }).ToList();
+        var treasureEntities = treasures.Select(treasure => new
+            Treasure
+            {
+                TreasureDescription = treasure,
+                CreatedBy = string.Empty,
+                LastModifiedBy = string.Empty
+            }
+        ).ToArray();
 
         await _context.Treasures.AddRangeAsync(treasureEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -90,7 +94,12 @@ public class AppDbContextInitializer(
     private async Task SeedMonstersAsync(CancellationToken cancellationToken)
     {
         var monsters = JsonHelper.DeserializeJson<Monster>(JsonHelper.MonsterFileName);
-        var monsterEntities = monsters.Select(monster => new Core.Domain.EG.Monster { JsonMonster = monster }).ToList();
+        var monsterEntities = monsters.Select(monster => new Core.Domain.EG.Monster
+        {
+            JsonMonster = monster,
+            CreatedBy = string.Empty,
+            LastModifiedBy = string.Empty
+        }).ToArray();
 
         await _context.Monsters.AddRangeAsync(monsterEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -489,35 +498,16 @@ public class AppDbContextInitializer(
             TreasureValue = 1,
             RoomDensity = 10,
             RoomSize = 20,
-            Corridor = true
+            Corridor = true,
+            CreatedBy = string.Empty,
+            LastModifiedBy = string.Empty
         };
 
         _context.DungeonOptions.Add(dungeonOption);
         await _context.SaveChangesAsync(token);
-
-        var model = new DungeonOptionModel
-        {
-            DungeonName = dungeonOption.DungeonName,
-            Created = dungeonOption.Created,
-            ItemsRarity = dungeonOption.ItemsRarity,
-            DeadEnd = dungeonOption.DeadEnd,
-            DungeonDifficulty = dungeonOption.DungeonDifficulty,
-            DungeonSize = dungeonOption.DungeonSize,
-            MonsterType = dungeonOption.MonsterType,
-            PartyLevel = dungeonOption.PartyLevel,
-            PartySize = dungeonOption.PartySize,
-            TrapPercent = dungeonOption.TrapPercent,
-            RoamingPercent = dungeonOption.RoamingPercent,
-            TreasureValue = dungeonOption.TreasureValue,
-            RoomDensity = dungeonOption.RoomDensity,
-            RoomSize = dungeonOption.RoomSize,
-            Corridor = dungeonOption.Corridor,
-            Id = dungeonOption.Id,
-            UserId = dungeonOption.UserId
-        };
-
+        var model = dungeonOption.ToModel();
         var sd = await _dungeonService.GenerateDungeonAsync(model, token);
-        sd.Level = 1;
+        sd = sd with { Level = 1 };
         await _dungeonService.AddDungeonAsync(sd, token);
 
         dungeonOption = new DungeonOption
@@ -537,34 +527,15 @@ public class AppDbContextInitializer(
             TreasureValue = 1,
             RoomDensity = 10,
             RoomSize = 20,
-            Corridor = false
+            Corridor = false,
+            CreatedBy = string.Empty,
+            LastModifiedBy = string.Empty
         };
         _context.DungeonOptions.Add(dungeonOption);
         await _context.SaveChangesAsync(token);
-
-        model = new DungeonOptionModel
-        {
-            DungeonName = dungeonOption.DungeonName,
-            Created = dungeonOption.Created,
-            ItemsRarity = dungeonOption.ItemsRarity,
-            DeadEnd = dungeonOption.DeadEnd,
-            DungeonDifficulty = dungeonOption.DungeonDifficulty,
-            DungeonSize = dungeonOption.DungeonSize,
-            MonsterType = dungeonOption.MonsterType,
-            PartyLevel = dungeonOption.PartyLevel,
-            PartySize = dungeonOption.PartySize,
-            TrapPercent = dungeonOption.TrapPercent,
-            RoamingPercent = dungeonOption.RoamingPercent,
-            TreasureValue = dungeonOption.TreasureValue,
-            RoomDensity = dungeonOption.RoomDensity,
-            RoomSize = dungeonOption.RoomSize,
-            Corridor = dungeonOption.Corridor,
-            Id = dungeonOption.Id,
-            UserId = dungeonOption.UserId
-        };
-
+        model = dungeonOption.ToModel();
         sd = await _dungeonService.GenerateDungeonAsync(model, token);
-        sd.Level = 1;
+        sd = sd with { Level = 1 };
         await _dungeonService.AddDungeonAsync(sd, token);
     }
 
@@ -578,7 +549,9 @@ public class AppDbContextInitializer(
             FirstName = "Test",
             LastName = "Admin",
             Email = "admin@admin.com",
-            Role = Role.Admin
+            Role = Role.Admin,
+            CreatedBy = string.Empty,
+            LastModifiedBy = string.Empty
         });
 
         _context.Users.Add(new User
@@ -589,7 +562,9 @@ public class AppDbContextInitializer(
             FirstName = "Test",
             LastName = "User",
             Email = "user@user.com",
-            Role = Role.User
+            Role = Role.User,
+            CreatedBy = string.Empty,
+            LastModifiedBy = string.Empty
         });
 
         if (seedDeletedUtUser)
@@ -603,7 +578,9 @@ public class AppDbContextInitializer(
                 LastName = "User",
                 Email = "user@user.com",
                 Role = Role.User,
-                IsDeleted = true
+                IsDeleted = true,
+                CreatedBy = string.Empty,
+                LastModifiedBy = string.Empty
             });
         }
 

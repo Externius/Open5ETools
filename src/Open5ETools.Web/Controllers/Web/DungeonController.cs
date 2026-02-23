@@ -1,4 +1,3 @@
-using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,12 +5,12 @@ using Open5ETools.Core.Common.Enums.DM;
 using Open5ETools.Core.Common.Helpers;
 using Open5ETools.Core.Common.Interfaces.Services;
 using Open5ETools.Core.Common.Interfaces.Services.DM;
-using Open5ETools.Core.Common.Models.DM.Services;
 using Open5ETools.Web.Models.Dungeon;
 using System.Text.Json;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Resources;
 using Open5ETools.Web.Extensions;
+using Open5ETools.Web.Mappers;
 
 namespace Open5ETools.Web.Controllers.Web;
 
@@ -20,13 +19,12 @@ public class DungeonController(
     IDungeonService dungeonService,
     IOptionService optionService,
     ICurrentUserService currentUserService,
-    IMapper mapper,
-    ILogger<DungeonController> logger) : Controller
+    ILogger<DungeonController> logger
+) : Controller
 {
     private readonly IOptionService _optionService = optionService;
     private readonly IDungeonService _dungeonService = dungeonService;
     private readonly ICurrentUserService _currentUserService = currentUserService;
-    private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -36,7 +34,7 @@ public class DungeonController(
                 cancellationToken);
         var model = new DungeonListViewModel
         {
-            List = list.Select(_mapper.Map<DungeonOptionViewModel>)
+            List = [.. list.Select(dom => dom.ToViewModel())]
         };
 
         return View(model);
@@ -47,15 +45,18 @@ public class DungeonController(
         var model = new LoadViewModel
         {
             Theme = string.Empty,
-            Option = _mapper.Map<DungeonOptionViewModel>(
+            Option = (
                 await _dungeonService.GetDungeonOptionByNameAsync(name, _currentUserService.GetUserIdAsInt(),
-                    cancellationToken) ?? throw new ServiceException(Error.NotFound)),
-            Themes = (await _optionService.ListOptionsAsync(OptionKey.Theme, cancellationToken))
-                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value, Selected = true })
+                    cancellationToken) ?? throw new ServiceException(Error.NotFound)).ToViewModel(),
+            Themes =
+            [
+                .. (await _optionService.ListOptionsAsync(OptionKey.Theme, cancellationToken)).Select(om =>
+                    new SelectListItem { Text = om.Name, Value = om.Value, Selected = true })
+            ]
         };
 
         if (level != 0)
-            model.Option.Dungeons = model.Option.Dungeons.Where(dm => dm.Level == level);
+            model.Option.Dungeons = [.. model.Option.Dungeons.Where(dm => dm.Level == level)];
 
         ViewData["ReturnUrl"] = Url.Action(nameof(Index));
         return View(model);
@@ -83,6 +84,7 @@ public class DungeonController(
         {
             Id = id,
             DungeonName = dungeonName,
+            NewDungeonName = string.Empty,
             UserId = _currentUserService.GetUserIdAsInt()
         };
         ViewData["ReturnUrl"] = Url.Action(nameof(Index));
@@ -137,7 +139,7 @@ public class DungeonController(
     {
         var monsterType = string.Empty;
         var monsters = await _optionService.ListOptionsAsync(OptionKey.MonsterType, cancellationToken);
-        if (model.MonsterType?.Length == monsters.Count())
+        if (model.MonsterType?.Length == monsters.Length)
         {
             monsterType = "any";
         }
@@ -161,8 +163,8 @@ public class DungeonController(
         {
             try
             {
-                var optionModel = _mapper.Map<DungeonOptionModel>(model);
-                optionModel.MonsterType = await GetMonsterTypeAsync(model, cancellationToken);
+                var optionModel = model.ToModel();
+                optionModel = optionModel with { MonsterType = await GetMonsterTypeAsync(model, cancellationToken) };
                 var dungeon = await _dungeonService.CreateOrUpdateDungeonAsync(optionModel, model.AddDungeon,
                     model.Level, cancellationToken);
                 return Json(JsonSerializer.Serialize(dungeon));
@@ -179,20 +181,11 @@ public class DungeonController(
 
     public async Task<IActionResult> Create(int optionId, CancellationToken cancellationToken)
     {
-        var model = new DungeonOptionCreateViewModel
-        {
-            DeadEnd = true,
-            Corridor = true,
-            ItemsRarity = 1,
-            UserId = _currentUserService.GetUserIdAsInt(),
-            TrapPercent = 15,
-            Level = 1
-        };
-
+        var model = DungeonMapper.CreateDefaultDungeonOptionCreateViewModel(_currentUserService.GetUserIdAsInt());
         if (optionId != 0)
         {
             var option = await _dungeonService.GetDungeonOptionAsync(optionId, cancellationToken);
-            model = _mapper.Map<DungeonOptionCreateViewModel>(option);
+            model = option.ToCreateViewModel();
             model.AddDungeon = true;
             if (model.MonsterType is not null && model.MonsterType[0].Equals("any"))
             {
@@ -208,31 +201,60 @@ public class DungeonController(
     private async Task FillCreateModelDropDownsAsync(DungeonOptionCreateViewModel model,
         CancellationToken cancellationToken)
     {
-        var options = await _optionService.ListOptionsAsync(null, cancellationToken);
-        var optionModels = options.ToList();
-        model.DungeonSizes = optionModels.Where(om => om.Key == OptionKey.Size)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value });
-        model.DungeonDifficulties = optionModels.Where(om => om.Key == OptionKey.Difficulty)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value });
+        var optionModels = await _optionService.ListOptionsAsync(null, cancellationToken);
+        model.DungeonSizes =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.Size)
+                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value })
+        ];
+        model.DungeonDifficulties =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.Difficulty)
+                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value })
+        ];
         model.PartyLevels = SelectListHelper.GenerateIntSelectList(1, 20);
         model.PartySizes = SelectListHelper.GenerateIntSelectList(1, 10);
-        model.TreasureValues = optionModels.Where(om => om.Key == OptionKey.TreasureValue)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value });
-        model.ItemsRarities = optionModels.Where(om => om.Key == OptionKey.ItemsRarity)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value });
-        model.RoomDensities = optionModels.Where(om => om.Key == OptionKey.RoomDensity)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value });
-        model.RoomSizes = optionModels.Where(om => om.Key == OptionKey.RoomSize)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value });
-        model.MonsterTypes = optionModels.Where(om => om.Key == OptionKey.MonsterType).Select(om =>
-            new SelectListItem { Text = om.Name, Value = om.Value, Selected = true });
-        model.TrapPercents = optionModels.Where(om => om.Key == OptionKey.TrapPercent).Select(om =>
-            new SelectListItem { Text = om.Name, Value = om.Value, Selected = true });
+        model.TreasureValues =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.TreasureValue)
+                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value })
+        ];
+        model.ItemsRarities =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.ItemsRarity)
+                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value })
+        ];
+        model.RoomDensities =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.RoomDensity)
+                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value })
+        ];
+        model.RoomSizes =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.RoomSize)
+                .Select(om => new SelectListItem { Text = om.Name, Value = om.Value })
+        ];
+        model.MonsterTypes =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.MonsterType).Select(om =>
+                new SelectListItem { Text = om.Name, Value = om.Value, Selected = true })
+        ];
+        model.TrapPercents =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.TrapPercent).Select(om =>
+                new SelectListItem { Text = om.Name, Value = om.Value, Selected = true })
+        ];
         model.DeadEnds = SelectListHelper.GetBool();
         model.Corridors = SelectListHelper.GetBool();
-        model.RoamingPercents = optionModels.Where(om => om.Key == OptionKey.RoamingPercent)
-            .Select(om => new SelectListItem { Text = om.Name, Value = om.Value, Selected = true });
-        model.Themes = optionModels.Where(om => om.Key == OptionKey.Theme).Select(om => new SelectListItem
-            { Text = om.Name, Value = om.Value, Selected = true });
+        model.RoamingPercents =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.RoamingPercent).Select(om => new SelectListItem
+                { Text = om.Name, Value = om.Value, Selected = true })
+        ];
+        model.Themes =
+        [
+            .. optionModels.Where(om => om.Key == OptionKey.Theme).Select(om => new SelectListItem
+                { Text = om.Name, Value = om.Value, Selected = true })
+        ];
     }
 }

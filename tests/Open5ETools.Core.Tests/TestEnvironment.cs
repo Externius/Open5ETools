@@ -53,23 +53,30 @@ public sealed class TestEnvironment : IDisposable
     {
         var dungeon = GetService<IDungeon>();
         optionModel ??= new DungeonOptionModel
-        {
-            DungeonName = "UT Dungeon",
-            Created = DateTime.UtcNow,
-            ItemsRarity = 1,
-            DeadEnd = true,
-            DungeonDifficulty = 1,
-            DungeonSize = 25,
-            MonsterType = "any",
-            PartyLevel = 4,
-            PartySize = 4,
-            TrapPercent = 20,
-            RoamingPercent = 0,
-            TreasureValue = 1,
-            RoomDensity = 10,
-            RoomSize = 20,
-            Corridor = false
-        };
+        (
+            "UT Dungeon",
+            AppDbContextInitializer.TestAdminUserId,
+            25,
+            1,
+            4,
+            4,
+            1,
+            1,
+            10,
+            20,
+            "any",
+            20,
+            true,
+            false,
+            0,
+            [],
+            1,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        );
 
         dungeon.Init(optionModel);
         return dungeon;
@@ -79,23 +86,30 @@ public sealed class TestEnvironment : IDisposable
     {
         var dungeonNoCorridor = GetService<IDungeonNoCorridor>();
         optionModel ??= new DungeonOptionModel
-        {
-            DungeonName = "UT Dungeon",
-            Created = DateTime.UtcNow,
-            ItemsRarity = 1,
-            DeadEnd = true,
-            DungeonDifficulty = 1,
-            DungeonSize = 15,
-            MonsterType = "any",
-            PartyLevel = 4,
-            PartySize = 4,
-            TrapPercent = 20,
-            RoamingPercent = 0,
-            TreasureValue = 1,
-            RoomDensity = 10,
-            RoomSize = 15,
-            Corridor = false
-        };
+        (
+            "UT Dungeon",
+            AppDbContextInitializer.TestAdminUserId,
+            15,
+            1,
+            4,
+            4,
+            1,
+            1,
+            10,
+            15,
+            "any",
+            20,
+            true,
+            false,
+            0,
+            [],
+            1,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        );
 
         dungeonNoCorridor.Init(optionModel);
         return dungeonNoCorridor;

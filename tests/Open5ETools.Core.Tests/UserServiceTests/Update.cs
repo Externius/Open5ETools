@@ -17,7 +17,7 @@ public class Update(TestFixture fixture) : IClassFixture<TestFixture>
     {
         var adminUser = await _userService.GetAsync(AppDbContextInitializer.TestAdminUserId,
             cancellationToken: TestContext.Current.CancellationToken);
-        adminUser.FirstName = ModifiedText;
+        adminUser = adminUser with { FirstName = ModifiedText };
         await _userService.UpdateAsync(adminUser, cancellationToken: TestContext.Current.CancellationToken);
         var result =
             await _userService.GetAsync(adminUser.Id, cancellationToken: TestContext.Current.CancellationToken);
@@ -27,7 +27,22 @@ public class Update(TestFixture fixture) : IClassFixture<TestFixture>
     [Fact]
     public async Task UpdateAsync_WithInValidModel_ThrowsServiceAggregateException()
     {
-        var model = new UserModel();
+        var model = new UserModel
+        (
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            false,
+            string.Empty,
+            0,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        );
         var expectedErrors = new List<string>
         {
             string.Format(Error.RequiredValidation, nameof(model.FirstName)),

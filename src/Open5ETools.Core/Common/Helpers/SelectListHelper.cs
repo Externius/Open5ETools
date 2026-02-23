@@ -4,7 +4,7 @@ namespace Open5ETools.Core.Common.Helpers;
 
 public static class SelectListHelper
 {
-    public static List<SelectListItem> GetBool()
+    public static SelectListItem[] GetBool()
     {
         return
         [
@@ -13,14 +13,15 @@ public static class SelectListHelper
         ];
     }
 
-    public static List<SelectListItem> GenerateIntSelectList(int from, int to)
+    public static SelectListItem[] GenerateIntSelectList(int from, int to)
     {
-        var list = new List<SelectListItem>();
-        for (var i = from; i <= to; i++)
+        var ints = Enumerable.Range(from, to - from + 1).ToArray();
+        var selectList = new SelectListItem[ints.Length];
+        for (var i = 0; i <= ints.Length - 1; i++)
         {
-            list.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+            selectList[i] = new SelectListItem { Text = ints[i].ToString(), Value = ints[i].ToString() };
         }
 
-        return list;
+        return selectList;
     }
 }

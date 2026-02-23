@@ -2,24 +2,29 @@
 
 namespace Open5ETools.Core.Common.Models.DM.Services;
 
-public class DungeonOptionModel : EditModel
-{
-    public string DungeonName { get; set; } = string.Empty;
-    public int UserId { get; set; }
-    public int DungeonSize { get; set; }
-    public int DungeonDifficulty { get; set; }
-    public int PartyLevel { get; set; }
-    public int PartySize { get; set; }
-    public double TreasureValue { get; set; }
-    public int ItemsRarity { get; set; }
-    public int RoomDensity { get; set; }
-    public int RoomSize { get; set; }
-    public string MonsterType { get; set; } = string.Empty;
-    public int TrapPercent { get; set; }
-    public bool DeadEnd { get; set; }
-    public bool Corridor { get; set; }
-    public int RoamingPercent { get; set; }
-    public int Width { get; set; } = 800;
-    public int Height { get; set; } = 800;
-    public IEnumerable<DungeonModel> Dungeons { get; set; } = [];
-}
+public record DungeonOptionModel(
+    string DungeonName,
+    int UserId,
+    int DungeonSize,
+    int DungeonDifficulty,
+    int PartyLevel,
+    int PartySize,
+    double TreasureValue,
+    int ItemsRarity,
+    int RoomDensity,
+    int RoomSize,
+    string MonsterType,
+    int TrapPercent,
+    bool DeadEnd,
+    bool Corridor,
+    int RoamingPercent,
+    DungeonModel[] Dungeons,
+    int Id,
+    byte[] Timestamp,
+    string CreatedBy,
+    DateTime Created,
+    string LastModifiedBy,
+    DateTime LastModified,
+    int Width = 800,
+    int Height = 800
+) : EditModel(Id, Timestamp, CreatedBy, Created, LastModifiedBy, LastModified);

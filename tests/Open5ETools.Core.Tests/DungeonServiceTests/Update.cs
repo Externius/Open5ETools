@@ -13,10 +13,13 @@ public class Update(TestFixture fixture) : IClassFixture<TestFixture>
     {
         const int dungeonId = 4;
         var oldDungeon = await _dungeonService.GetDungeonAsync(dungeonId, TestContext.Current.CancellationToken);
-        oldDungeon.DungeonTiles = Constants.Empty;
-        oldDungeon.TrapDescription = Constants.Empty;
-        oldDungeon.RoomDescription = Constants.Empty;
-        oldDungeon.RoamingMonsterDescription = Constants.Empty;
+        oldDungeon = oldDungeon with
+        {
+            DungeonTiles = Constants.Empty,
+            TrapDescription = Constants.Empty,
+            RoomDescription = Constants.Empty,
+            RoamingMonsterDescription = Constants.Empty
+        };
         await _dungeonService.UpdateDungeonAsync(oldDungeon, TestContext.Current.CancellationToken);
         var result = await _dungeonService.GetDungeonAsync(dungeonId, TestContext.Current.CancellationToken);
         result.ShouldNotBeNull();

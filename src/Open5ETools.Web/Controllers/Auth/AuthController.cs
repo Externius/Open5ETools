@@ -1,19 +1,16 @@
-using MapsterMapper;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Open5ETools.Core.Common.Interfaces.Services;
-using Open5ETools.Core.Common.Models.Services;
 using Open5ETools.Web.Models.Auth;
 using System.Security.Claims;
 
 namespace Open5ETools.Web.Controllers.Auth;
 
-public class AuthController(IAuthService authService, IMapper mapper) : Controller
+public class AuthController(IAuthService authService) : Controller
 {
     private readonly IAuthService _authService = authService;
-    private readonly IMapper _mapper = mapper;
 
     public IActionResult Login()
     {
@@ -21,14 +18,16 @@ public class AuthController(IAuthService authService, IMapper mapper) : Controll
         {
             return RedirectToAction("Index", "Dungeon");
         }
+
         return View();
     }
+
     [HttpPost]
     public async Task<ActionResult> Login(LoginViewModel model, string? returnUrl, CancellationToken cancellationToken)
     {
         if (ModelState.IsValid)
         {
-            var user = await _authService.LoginAsync(_mapper.Map<UserModel>(model), cancellationToken);
+            var user = await _authService.LoginAsync(model.Username, model.Password, cancellationToken);
 
             if (user is null)
             {
@@ -44,9 +43,11 @@ public class AuthController(IAuthService authService, IMapper mapper) : Controll
                 new(JwtClaimTypes.Role, user.Role)
             };
 
-            var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, JwtClaimTypes.Subject, JwtClaimTypes.Role);
+            var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme,
+                JwtClaimTypes.Subject, JwtClaimTypes.Role);
 
-            var authProperties = (await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme)).Properties;
+            var authProperties =
+                (await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme)).Properties;
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(userIdentity),
@@ -56,8 +57,10 @@ public class AuthController(IAuthService authService, IMapper mapper) : Controll
                 return RedirectToAction("Index", "Dungeon");
             return Redirect(returnUrl);
         }
+
         return View();
     }
+
     public async Task<ActionResult> Logout()
     {
         await HttpContext.SignOutAsync();

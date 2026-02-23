@@ -6,5 +6,5 @@ public interface IEncounterService
 {
     Task<MonsterModel> GetMonsterByIdAsync(int id);
     Task<EncounterModel> GenerateAsync(EncounterOption option);
-    Task<ICollection<KeyValuePair<string, int>>> GetEnumListAsync<T>() where T : struct;
+    Task<KeyValuePair<string, int>[]> GetEnumListAsync<T>() where T : struct;
 }

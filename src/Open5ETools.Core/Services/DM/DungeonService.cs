@@ -1,19 +1,17 @@
 ﻿using System.Text.Json;
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Common.Interfaces.Services.DM;
 using Open5ETools.Core.Common.Interfaces.Services.DM.Generator;
+using Open5ETools.Core.Common.Mappers;
 using Open5ETools.Core.Common.Models.DM.Services;
-using Open5ETools.Core.Domain.DM;
 using Open5ETools.Resources;
 
 namespace Open5ETools.Core.Services.DM;
 
 public class DungeonService(
-    IMapper mapper,
     IAppDbContext context,
     IDungeon dungeon,
     IDungeonNoCorridor dungeonNcDungeon,
@@ -22,7 +20,6 @@ public class DungeonService(
     private readonly IAppDbContext _context = context;
     private readonly IDungeon _dungeon = dungeon;
     private readonly IDungeonNoCorridor _dungeonNcDungeon = dungeonNcDungeon;
-    private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
     public async Task<int> CreateDungeonOptionAsync(DungeonOptionModel dungeonOption,
@@ -31,7 +28,7 @@ public class DungeonService(
         try
         {
             ValidateModel(dungeonOption);
-            var option = _mapper.Map<DungeonOption>(dungeonOption);
+            var option = dungeonOption.ToEntity();
             _context.DungeonOptions.Add(option);
             await _context.SaveChangesAsync(cancellationToken);
             return option.Id;
@@ -58,7 +55,7 @@ public class DungeonService(
     {
         try
         {
-            var dungeonEntity = _mapper.Map<Domain.DM.Dungeon>(savedDungeon);
+            var dungeonEntity = savedDungeon.ToEntity();
             _context.Dungeons.Add(dungeonEntity);
             await _context.SaveChangesAsync(cancellationToken);
             return dungeonEntity.Id;
@@ -98,7 +95,7 @@ public class DungeonService(
                     cancellationToken);
             }
 
-            optionModel.Id = existingDungeonOption.Id;
+            optionModel = optionModel with { Id = existingDungeonOption.Id };
             return await AddDungeonToExistingOptionAsync(optionModel, level, cancellationToken);
         }
         catch (Exception ex)
@@ -112,8 +109,7 @@ public class DungeonService(
         DungeonOptionModel existingDungeonOption, DungeonModel oldDungeon, CancellationToken cancellationToken)
     {
         var dungeonModel = await GenerateDungeonAsync(optionModel, existingDungeonOption.Id, cancellationToken);
-        dungeonModel.Id = oldDungeon.Id;
-        dungeonModel.Level = oldDungeon.Level;
+        dungeonModel = dungeonModel with { Id = oldDungeon.Id, Level = oldDungeon.Level };
         await UpdateDungeonAsync(dungeonModel, cancellationToken);
         return dungeonModel;
     }
@@ -123,9 +119,9 @@ public class DungeonService(
     {
         var dungeonOptionId = await CreateDungeonOptionAsync(optionModel, cancellationToken);
         var dungeonModel = await GenerateDungeonAsync(optionModel, dungeonOptionId, cancellationToken);
-        dungeonModel.Level = 1;
+        dungeonModel = dungeonModel with { Level = 1 };
         var id = await AddDungeonAsync(dungeonModel, cancellationToken);
-        dungeonModel.Id = id;
+        dungeonModel = dungeonModel with { Id = id };
         return dungeonModel;
     }
 
@@ -136,15 +132,15 @@ public class DungeonService(
             (await ListUserDungeonsByNameAsync(optionModel.DungeonName, optionModel.UserId, cancellationToken))
             .ToList();
         var dungeonModel = await GenerateDungeonAsync(optionModel, optionModel.Id, cancellationToken);
-        dungeonModel.Level = level;
+        dungeonModel = dungeonModel with { Level = level };
         if (existingDungeons.Exists(d => d.Level == level))
         {
-            dungeonModel.Id = existingDungeons.First(dm => dm.Level == level).Id;
+            dungeonModel = dungeonModel with { Id = existingDungeons.First(dm => dm.Level == level).Id };
             await UpdateDungeonAsync(dungeonModel, cancellationToken);
         }
         else
         {
-            dungeonModel.Id = await AddDungeonAsync(dungeonModel, cancellationToken);
+            dungeonModel = dungeonModel with { Id = await AddDungeonAsync(dungeonModel, cancellationToken) };
         }
 
         return dungeonModel;
@@ -154,7 +150,7 @@ public class DungeonService(
         CancellationToken cancellationToken)
     {
         var dungeonModel = await GenerateDungeonAsync(optionModel, cancellationToken);
-        dungeonModel.DungeonOptionId = optionId;
+        dungeonModel = dungeonModel with { DungeonOptionId = optionId };
         return dungeonModel;
     }
 
@@ -185,7 +181,7 @@ public class DungeonService(
                 .OrderBy(d => d.Created)
                 .ToArrayAsync(cancellationToken);
 
-            return [.. options.Select(_mapper.Map<DungeonOptionModel>)];
+            return [.. options.Select(d => d.ToModel())];
         }
         catch (Exception ex)
         {
@@ -206,7 +202,7 @@ public class DungeonService(
                 .OrderBy(d => d.Created)
                 .ToArrayAsync(cancellationToken);
 
-            return [.. options.Select(_mapper.Map<DungeonOptionModel>)];
+            return [.. options.Select(d => d.ToModel())];
         }
         catch (Exception ex)
         {
@@ -225,7 +221,7 @@ public class DungeonService(
                 .AsNoTracking()
                 .Where(d => d.DungeonName.Equals(dungeonName) && d.UserId == userId)
                 .FirstOrDefaultAsync(cancellationToken);
-            return dungeonOption is not null ? _mapper.Map<DungeonOptionModel>(dungeonOption) : null;
+            return dungeonOption?.ToModel();
         }
         catch (Exception ex)
         {
@@ -291,7 +287,7 @@ public class DungeonService(
         var entity = await _context.DungeonOptions
             .Include(d => d.Dungeons)
             .FirstOrDefaultAsync(d => d.Id == dungeonOptionId, cancellationToken);
-        if (entity is not null && !entity.Dungeons.Any())
+        if (entity is not null && entity.Dungeons.Count == 0)
         {
             _context.DungeonOptions.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken);
@@ -309,7 +305,7 @@ public class DungeonService(
                 .OrderBy(d => d.Created)
                 .SelectMany(d => d.Dungeons)
                 .ToArrayAsync(cancellationToken);
-            return [.. result.Select(_mapper.Map<DungeonModel>)];
+            return [.. result.Select(d => d.ToModel())];
         }
         catch (Exception ex)
         {
@@ -330,7 +326,7 @@ public class DungeonService(
                 .OrderBy(d => d.Created)
                 .SelectMany(d => d.Dungeons)
                 .ToArrayAsync(cancellationToken);
-            return [.. result.Select(_mapper.Map<DungeonModel>)];
+            return [.. result.Select(d => d.ToModel())];
         }
         catch (Exception ex)
         {
@@ -343,10 +339,10 @@ public class DungeonService(
     {
         try
         {
-            return _mapper.Map<DungeonModel>(await _context.Dungeons
-                                                 .AsNoTracking()
-                                                 .FirstOrDefaultAsync(d => d.Id == id, cancellationToken) ??
-                                             throw new ServiceException(Error.NotFound));
+            return (await _context.Dungeons
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(d => d.Id == id, cancellationToken) ??
+                    throw new ServiceException(Error.NotFound)).ToModel();
         }
         catch (Exception ex)
         {
@@ -359,11 +355,10 @@ public class DungeonService(
     {
         try
         {
-            var entity = await _context.Dungeons
-                .FirstOrDefaultAsync(d => d.Id == model.Id, cancellationToken);
+            var entity = await _context.Dungeons.FirstOrDefaultAsync(d => d.Id == model.Id, cancellationToken);
             if (entity is not null)
             {
-                _mapper.Map(model, entity);
+                DungeonMapper.Map(entity, model);
                 await _context.SaveChangesAsync(cancellationToken);
             }
         }
@@ -378,9 +373,9 @@ public class DungeonService(
     {
         try
         {
-            return _mapper.Map<DungeonOptionModel>(
+            return (
                 await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == id, cancellationToken) ??
-                throw new ServiceException(Error.NotFound));
+                throw new ServiceException(Error.NotFound)).ToModel();
         }
         catch (Exception ex)
         {
@@ -393,8 +388,8 @@ public class DungeonService(
     {
         try
         {
-            var entity = await _context.DungeonOptions.FirstOrDefaultAsync(d => d.Id == optionId && d.UserId == userId,
-                cancellationToken);
+            var entity = await _context.DungeonOptions
+                .FirstOrDefaultAsync(d => d.Id == optionId && d.UserId == userId, cancellationToken);
             if (entity is not null)
             {
                 entity.DungeonName = newName;
@@ -412,11 +407,11 @@ public class DungeonService(
     {
         try
         {
-            var dungeon = _mapper.Map<DungeonModel>(await _context.Dungeons
-                                                        .AsNoTracking()
-                                                        .FirstOrDefaultAsync(d => d.Id == dungeonId,
-                                                            cancellationToken) ??
-                                                    throw new ServiceException(Error.NotFound));
+            var dungeon = (await _context.Dungeons
+                               .AsNoTracking()
+                               .FirstOrDefaultAsync(d => d.Id == dungeonId,
+                                   cancellationToken) ??
+                           throw new ServiceException(Error.NotFound)).ToModel();
 
             return JsonSerializer.Serialize(dungeon);
         }

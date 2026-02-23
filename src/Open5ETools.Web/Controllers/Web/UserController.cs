@@ -1,19 +1,17 @@
-﻿using MapsterMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Open5ETools.Core.Common.Interfaces.Services;
-using Open5ETools.Core.Common.Models.Services;
 using Open5ETools.Core.Domain;
 using Open5ETools.Web.Extensions;
+using Open5ETools.Web.Mappers;
 using Open5ETools.Web.Models.User;
 
 namespace Open5ETools.Web.Controllers.Web;
 
 [Authorize(Roles = Roles.Admin)]
-public class UserController(IUserService userService, IMapper mapper, ILogger<UserController> logger) : Controller
+public class UserController(IUserService userService, ILogger<UserController> logger) : Controller
 {
     private readonly IUserService _userService = userService;
-    private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
     public async Task<IActionResult> Index()
@@ -22,14 +20,23 @@ public class UserController(IUserService userService, IMapper mapper, ILogger<Us
 
         return View(new UserListViewModel
         {
-            Details = list.Select(_mapper.Map<UserEditViewModel>)
+            Details = [.. list.Select(um => um.ToEditViewModel())]
         });
     }
 
     [HttpGet]
     public IActionResult Create()
     {
-        return View(new UserCreateViewModel());
+        return View(new UserCreateViewModel
+        {
+            Username = string.Empty,
+            Password = string.Empty,
+            ConfirmPassword = string.Empty,
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Email = string.Empty,
+            Role = string.Empty
+        });
     }
 
     [HttpPost]
@@ -40,7 +47,7 @@ public class UserController(IUserService userService, IMapper mapper, ILogger<Us
         {
             try
             {
-                await _userService.CreateAsync(_mapper.Map<UserModel>(model), cancellationToken);
+                await _userService.CreateAsync(model.ToModel(), cancellationToken);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -55,8 +62,8 @@ public class UserController(IUserService userService, IMapper mapper, ILogger<Us
     [HttpGet]
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-        var model = _mapper.Map<UserEditViewModel>(await _userService.GetAsync(id, cancellationToken));
-        return View(model);
+        var user = await _userService.GetAsync(id, cancellationToken);
+        return View(user.ToEditViewModel());
     }
 
     [HttpPost]
@@ -67,9 +74,7 @@ public class UserController(IUserService userService, IMapper mapper, ILogger<Us
         {
             try
             {
-                var user = new UserModel();
-                _mapper.Map(model, user);
-                await _userService.UpdateAsync(user, cancellationToken);
+                await _userService.UpdateAsync(model.ToModel(), cancellationToken);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

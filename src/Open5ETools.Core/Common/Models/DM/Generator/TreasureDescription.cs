@@ -5,5 +5,5 @@ public record TreasureDescription(
     int Cost,
     int Rarity,
     bool Magical,
-    IReadOnlyCollection<string> Types
+    string[] Types
 );

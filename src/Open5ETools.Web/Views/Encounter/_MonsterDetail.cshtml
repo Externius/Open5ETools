@@ -9,31 +9,31 @@
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">@Resources.Encounter.MonsterName</label>
     <div class="col-sm-4">
-        <input class="form-control" type="text" readonly value="@Model.JsonMonsterModel.Name">
+        <input class="form-control" type="text" readonly value="@Model.Monster.Name">
     </div>
     <label class="col-sm-2 col-form-label">@Resources.Encounter.MonsterType</label>
     <div class="col-sm-4">
-        <input class="form-control" type="text" readonly value="@Model.JsonMonsterModel.Type">
+        <input class="form-control" type="text" readonly value="@Model.Monster.Type">
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">@Resources.Common.Size</label>
     <div class="col-sm-4">
-        <input class="form-control" type="text" readonly value="@Model.JsonMonsterModel.Size">
+        <input class="form-control" type="text" readonly value="@Model.Monster.Size">
     </div>
     <label class="col-sm-2 col-form-label">@Resources.Encounter.ChallangeRating</label>
     <div class="col-sm-4">
-        <input class="form-control" type="text" readonly value="@Model.JsonMonsterModel.ChallengeRating">
+        <input class="form-control" type="text" readonly value="@Model.Monster.ChallengeRating">
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">@Resources.Common.Speed </label>
     <div class="col-sm-4">
-        <input class="form-control" type="text" readonly value="@Model.JsonMonsterModel.Speed">
+        <input class="form-control" type="text" readonly value="@Model.Monster.Speed">
     </div>
     <label class="col-sm-2 col-form-label">@Resources.Common.Alignment</label>
     <div class="col-sm-4">
-        <input class="form-control" type="text" readonly value="@Model.JsonMonsterModel.Alignment">
+        <input class="form-control" type="text" readonly value="@Model.Monster.Alignment">
     </div>
 </div>
 <div class="form-group row">
@@ -42,10 +42,10 @@
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Strength</label>
         </div>
         <input type="text" class="form-control text-center" readonly
-            value="@Model.JsonMonsterModel.Strength (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Strength))">
+            value="@Model.Monster.Strength (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Strength))">
         <div class="input-group-append">
             <label
-                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Strength)</label>
+                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Strength)</label>
         </div>
     </div>
     <div class="input-group mb-3 col-sm-4">
@@ -53,10 +53,10 @@
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Dexterity</label>
         </div>
         <input type="text" class="form-control text-center" readonly
-            value="@Model.JsonMonsterModel.Dexterity (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Dexterity))">
+            value="@Model.Monster.Dexterity (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Dexterity))">
         <div class="input-group-append">
             <label
-                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Dexterity)</label>
+                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Dexterity)</label>
         </div>
     </div>
     <div class="input-group mb-3 col-sm-4">
@@ -64,10 +64,10 @@
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Constitution</label>
         </div>
         <input type="text" class="form-control text-center" readonly
-            value="@Model.JsonMonsterModel.Constitution (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Constitution))">
+            value="@Model.Monster.Constitution (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Constitution))">
         <div class="input-group-append">
             <label
-                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Constitution)</label>
+                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Constitution)</label>
         </div>
     </div>
 </div>
@@ -77,10 +77,10 @@
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Intelligence</label>
         </div>
         <input type="text" class="form-control text-center" readonly
-            value="@Model.JsonMonsterModel.Intelligence (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Intelligence))">
+            value="@Model.Monster.Intelligence (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Intelligence))">
         <div class="input-group-append">
             <label
-                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Intelligence)</label>
+                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Intelligence)</label>
         </div>
     </div>
     <div class="input-group mb-3 col-sm-4">
@@ -88,10 +88,10 @@
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Wisdom</label>
         </div>
         <input type="text" class="form-control text-center" readonly
-            value="@Model.JsonMonsterModel.Wisdom (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Wisdom))">
+            value="@Model.Monster.Wisdom (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Wisdom))">
         <div class="input-group-append">
             <label
-                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Wisdom)</label>
+                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Wisdom)</label>
         </div>
     </div>
     <div class="input-group mb-3 col-sm-4">
@@ -99,10 +99,10 @@
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Charisma</label>
         </div>
         <input type="text" class="form-control text-center" readonly
-            value="@Model.JsonMonsterModel.Charisma (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Charisma))">
+            value="@Model.Monster.Charisma (@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Charisma))">
         <div class="input-group-append">
             <label
-                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.JsonMonsterModel.Charisma)</label>
+                class="input-group-text saving-throw">@Open5ETools.Core.Common.Helpers.AbilityHelper.CalcMod(@Model.Monster.Charisma)</label>
         </div>
     </div>
 </div>
@@ -111,16 +111,16 @@
         <div class="input-group-prepend">
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Hp</label>
         </div>
-        <input type="text" class="form-control text-center" readonly value="@Model.JsonMonsterModel.Hp">
+        <input type="text" class="form-control text-center" readonly value="@Model.Monster.Hp">
     </div>
     <div class="input-group mb-3 col-sm-2">
         <div class="input-group-prepend">
             <label class="input-group-text font-weight-bold ability">@Resources.Encounter.Ac</label>
         </div>
-        <input type="text" class="form-control text-center" readonly value="@Model.JsonMonsterModel.Ac">
+        <input type="text" class="form-control text-center" readonly value="@Model.Monster.Ac">
     </div>
 </div>
-@if (Model.JsonMonsterModel.Actions is not null && Model.JsonMonsterModel.Actions.Count > 0)
+@if (Model.Monster.Actions.Length > 0)
 {
     <div class="col-md-12">
     <h2>@Resources.Encounter.Actions</h2>
@@ -135,7 +135,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var action in @Model.JsonMonsterModel.Actions)
+            @foreach (var action in @Model.Monster.Actions)
                 {
                     <tr>
                         <td class="">@action.Name</td>
@@ -156,7 +156,7 @@
         </table>
     </div>
 }
-@if (Model.JsonMonsterModel.Reactions is not null && Model.JsonMonsterModel.Reactions.Count > 0)
+@if (Model.Monster.Reactions.Length > 0)
 {
     <div class="col-md-12">
     <h2>@Resources.Encounter.Reactions</h2>
@@ -169,7 +169,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var reaction in @Model.JsonMonsterModel.Reactions)
+            @foreach (var reaction in @Model.Monster.Reactions)
                 {
                     <tr>
                         <td class="">@reaction.Name</td>
@@ -188,7 +188,7 @@
         </table>
     </div>
 }
-@if (Model.JsonMonsterModel.SpecialAbilities is not null && Model.JsonMonsterModel.SpecialAbilities.Count > 0)
+@if (Model.Monster.SpecialAbilities.Length > 0)
 {
     <div class="col-md-12">
     <h2>@Resources.Encounter.SpecialAbilities</h2>
@@ -202,7 +202,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var ability in @Model.JsonMonsterModel.SpecialAbilities)
+            @foreach (var ability in @Model.Monster.SpecialAbilities)
                 {
                     <tr>
                         <td class="">@ability.Name</td>
@@ -222,7 +222,7 @@
         </table>
     </div>
 }
-@if (Model.JsonMonsterModel.LegendaryActions is not null && Model.JsonMonsterModel.LegendaryActions.Count > 0)
+@if (Model.Monster.LegendaryActions.Length > 0)
 {
     <div class="col-md-12">
     <h2>@Resources.Encounter.LegendaryActions</h2>
@@ -236,7 +236,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var action in @Model.JsonMonsterModel.LegendaryActions)
+            @foreach (var action in @Model.Monster.LegendaryActions)
                 {
                     <tr>
                         <td class="">@action.Name</td>

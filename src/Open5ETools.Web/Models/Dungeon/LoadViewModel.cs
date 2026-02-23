@@ -5,10 +5,12 @@ namespace Open5ETools.Web.Models.Dungeon;
 
 public class LoadViewModel
 {
-    public DungeonOptionViewModel Option { get; set; } = new();
-    public string Theme { get; set; } = string.Empty;
+    public required DungeonOptionViewModel Option { get; set; }
+    public required string Theme { get; set; }
+
     [Display(ResourceType = typeof(Resources.Dungeon), Name = "Theme")]
-    public IEnumerable<SelectListItem> Themes { get; set; } = [];
+    public SelectListItem[] Themes { get; init; } = [];
+
     [Display(ResourceType = typeof(Resources.Dungeon), Name = "GeneratePlainMap")]
     public bool GeneratePlainMap { get; set; }
 }

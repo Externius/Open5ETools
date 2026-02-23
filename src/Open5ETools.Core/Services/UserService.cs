@@ -1,22 +1,20 @@
-﻿using MapsterMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Open5ETools.Core.Common.Enums;
 using Open5ETools.Core.Common.Exceptions;
 using Open5ETools.Core.Common.Helpers;
 using Open5ETools.Core.Common.Interfaces.Data;
 using Open5ETools.Core.Common.Interfaces.Services;
+using Open5ETools.Core.Common.Mappers;
 using Open5ETools.Core.Common.Models.Services;
 using Open5ETools.Resources;
 using Enum = System.Enum;
-using User = Open5ETools.Core.Domain.User;
 
 namespace Open5ETools.Core.Services;
 
-public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserService> logger) : IUserService
+public class UserService(IAppDbContext context, ILogger<UserService> logger) : IUserService
 {
     private readonly IAppDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
     private readonly ILogger _logger = logger;
 
     public async Task<int> CreateAsync(UserModel model, CancellationToken cancellationToken = default)
@@ -25,8 +23,8 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         await CheckUserExistAsync(model, cancellationToken);
         try
         {
-            model.Password = PasswordHelper.EncryptPassword(model.Password);
-            var user = _mapper.Map<User>(model);
+            model = model with { Password = PasswordHelper.EncryptPassword(model.Password) };
+            var user = model.ToEntity();
             _context.Users.Add(user);
             await _context.SaveChangesAsync(cancellationToken);
             return user.Id;
@@ -99,7 +97,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
                            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken) ??
                        throw new ServiceException(Error.NotFound);
 
-            return _mapper.Map<UserModel>(user);
+            return user.ToModel();
         }
         catch (Exception ex)
         {
@@ -120,7 +118,7 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
             return
             [
                 .. (await query.ToListAsync(cancellationToken))
-                .Select(_mapper.Map<UserModel>)
+                .Select(u => u.ToModel())
                 .OrderBy(um => um.Username)
             ];
         }
@@ -136,14 +134,11 @@ public class UserService(IMapper mapper, IAppDbContext context, ILogger<UserServ
         try
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id && u.IsDeleted, cancellationToken);
-            if (user is not null)
-            {
-                user.IsDeleted = false;
-                await _context.SaveChangesAsync(cancellationToken);
-                return true;
-            }
-
-            return false;
+            if (user is null)
+                return false;
+            user.IsDeleted = false;
+            await _context.SaveChangesAsync(cancellationToken);
+            return true;
         }
         catch (Exception ex)
         {

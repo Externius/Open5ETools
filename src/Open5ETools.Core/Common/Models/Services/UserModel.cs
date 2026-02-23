@@ -1,12 +1,17 @@
 ﻿namespace Open5ETools.Core.Common.Models.Services;
 
-public class UserModel : EditModel
-{
-    public string Username { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; }
-    public string Role { get; set; } = string.Empty;
-}
+public record UserModel(
+    string Username,
+    string FirstName,
+    string LastName,
+    string Email,
+    string Password,
+    bool IsDeleted,
+    string Role,
+    int Id,
+    byte[] Timestamp,
+    string CreatedBy,
+    DateTime Created,
+    string LastModifiedBy,
+    DateTime LastModified
+) : EditModel(Id, Timestamp, CreatedBy, Created, LastModifiedBy, LastModified);

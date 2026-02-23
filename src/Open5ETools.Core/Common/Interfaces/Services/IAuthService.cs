@@ -4,5 +4,5 @@ namespace Open5ETools.Core.Common.Interfaces.Services;
 
 public interface IAuthService
 {
-    Task<UserModel?> LoginAsync(UserModel model, CancellationToken cancellationToken = default);
+    Task<UserModel?> LoginAsync(string userName, string password, CancellationToken cancellationToken);
 }

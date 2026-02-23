@@ -4,5 +4,5 @@ namespace Open5ETools.Core.Domain.DM;
 
 public class Treasure : AuditableEntity
 {
-    public TreasureDescription TreasureDescription { get; set; } = null!;
+    public required TreasureDescription TreasureDescription { get; set; }
 }

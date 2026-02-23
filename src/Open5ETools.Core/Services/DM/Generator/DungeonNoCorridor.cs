@@ -23,13 +23,20 @@ public class DungeonNoCorridor(IDungeonHelper dungeonHelper) : Dungeon(dungeonHe
         AddEntryPoint();
         AddDescription();
         return new DungeonModel
-        {
-            DungeonTiles = JsonSerializer.Serialize(DungeonTiles),
-            RoomDescription = JsonSerializer.Serialize(RoomDescription),
-            DungeonOptionId = model.Id,
-            TrapDescription = Constants.Empty,
-            RoamingMonsterDescription = Constants.Empty
-        };
+        (
+            JsonSerializer.Serialize(DungeonTiles),
+            JsonSerializer.Serialize(RoomDescription),
+            Constants.Empty,
+            Constants.Empty,
+            model.Id,
+            0,
+            0,
+            [],
+            string.Empty,
+            DateTime.UtcNow,
+            string.Empty,
+            DateTime.UtcNow
+        );
     }
 
     public override void Init(DungeonOptionModel optionModel)

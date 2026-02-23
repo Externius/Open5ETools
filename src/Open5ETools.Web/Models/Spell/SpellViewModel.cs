@@ -4,41 +4,23 @@ namespace Open5ETools.Web.Models.Spell;
 
 public class SpellViewModel : EditViewModel
 {
-    public string Name { get; set; } = string.Empty;
-
-    public string Desc { get; set; } = string.Empty;
-
-    public string? HigherLevel { get; set; }
-
-    public string Page { get; set; } = string.Empty;
-
-    public string Range { get; set; } = string.Empty;
-
-    public string Components { get; set; } = string.Empty;
-
-    public string? Material { get; set; }
-
-    public bool Ritual { get; set; }
-
-    public string? Duration { get; set; }
-
-    public bool Concentration { get; set; }
-
-    public string CastingTime { get; set; } = string.Empty;
-
-    public string Level { get; set; } = string.Empty;
-
-    public School School { get; set; }
-
-    public string Class { get; set; } = string.Empty;
-
-    public string? Archetype { get; set; }
-
-    public string? Circles { get; set; }
-
-    public string? Domains { get; set; }
-
-    public string? Oaths { get; set; }
-
-    public string? Patrons { get; set; }
+    public required string Name { get; init; }
+    public required string Desc { get; init; }
+    public required string CastingTime { get; init; }
+    public required string Level { get; init; }
+    public required string Class { get; init; }
+    public required string Page { get; init; }
+    public required string Range { get; init; }
+    public required string Components { get; init; }
+    public required School School { get; init; }
+    public bool Ritual { get; init; }
+    public bool Concentration { get; init; }
+    public string? Duration { get; init; }
+    public string? Material { get; init; }
+    public string? HigherLevel { get; init; }
+    public string? Archetype { get; init; }
+    public string? Circles { get; init; }
+    public string? Domains { get; init; }
+    public string? Oaths { get; init; }
+    public string? Patrons { get; init; }
 }
