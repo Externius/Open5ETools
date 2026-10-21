@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TieredCompilation>true</TieredCompilation>
         <PreserveCompilationReferences>true</PreserveCompilationReferences>
-        <AssemblyVersion>1.0.13.0</AssemblyVersion>
+        <AssemblyVersion>1.0.14.0</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="IdentityModel"/>
@@ -338,20 +338,11 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\localization\methods_nl.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\localization\methods_pt.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\localization\methods_pt.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.factory.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.factory.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.factory.slim.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.factory.slim.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.min.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.slim.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.slim.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\jquery.slim.min.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\package.json" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\wrappers\jquery.bundler-require-wrapper.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\wrappers\jquery.bundler-require-wrapper.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\wrappers\jquery.bundler-require-wrapper.slim.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\wrappers\jquery.bundler-require-wrapper.slim.min.js" />
     </ItemGroup>
 </Project>
