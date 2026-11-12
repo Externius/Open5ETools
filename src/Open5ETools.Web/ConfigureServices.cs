@@ -48,11 +48,7 @@ public static class ConfigureServices
 
         services.AddMemoryCache();
 
-        services.AddMvc()
-#if DEBUG
-            .AddRazorRuntimeCompilation()
-#endif
-            ;
+        services.AddMvc();
         services.AddWebOptimizer(pipeline =>
         {
             pipeline.AddJavaScriptBundle("js/site.min.js", "js/site.js", "js/password.js");
@@ -63,10 +59,9 @@ public static class ConfigureServices
         return services;
     }
 
-    public static IHostBuilder AddSerilog(this IHostBuilder host,
-        IConfiguration configuration)
+    public static IHostBuilder AddSerilog(this IHostBuilder host, IConfiguration configuration)
     {
-        switch (configuration.GetConnectionString(AppDbContext.DbProvider)?.ToLower())
+        switch (configuration.GetConnectionString(AppDbContext.DbProvider)?.ToLowerInvariant())
         {
             case AppDbContext.SqlServerContext:
                 host.UseSerilog((ctx, lc) => lc
